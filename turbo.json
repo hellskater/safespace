@@ -4,6 +4,7 @@
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],
+      "env": ["PANGEA_DOMAIN", "PANGEA_TOKEN"],
       "outputs": [".next/**", "!.next/cache/**"]
     },
     "lint": {
@@ -11,7 +12,8 @@
     },
     "dev": {
       "cache": false,
-      "persistent": true
+      "persistent": true,
+      "env": ["PANGEA_DOMAIN", "PANGEA_TOKEN"]
     }
   }
 }
