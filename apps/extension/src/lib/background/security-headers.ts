@@ -13,6 +13,30 @@ export const SECURITY_HEADERS = [
   "X-Frame-Options"
 ]
 
+export type SecurityReport = {
+  finalScore: number
+  finalCategory: "Robust" | "Medium" | "Low"
+  securityHeadersReport: {
+    headers: Record<
+      string,
+      {
+        implemented: boolean
+        score: number
+        category: "Robust" | "Medium" | "Low"
+        actionableFeedback: string[]
+        positiveFeedback: string[]
+        negativeFeedback: string[]
+      }
+    >
+    overallScore: number
+    category: "Robust" | "Medium" | "Low"
+  }
+  domainReport: {
+    score: number
+    category: "Robust" | "Medium" | "Low"
+  }
+}
+
 function calculateSecurityHeadersScore(
   headers: chrome.webRequest.HttpHeader[]
 ) {
@@ -246,33 +270,35 @@ export const logHeaders = () => {
           )
         )
 
-        fetch(`http://localhost:3000/api/analyze/domain?q=${domain}`)
-          .then((res) => {
-            const result = res.json()
-            return result
-          })
-          .then((data) => {
-            const finalReport = calculateFinalScore(
-              securityHeaders,
-              data.summary
-            )
-            console.log("Security report:", finalReport)
+        // fetch(`http://localhost:3000/api/analyze/domain?q=${domain}`)
+        //   .then((res) => {
+        //     const result = res.json()
+        //     return result
+        //   })
+        //   .then((data) => {
+        //     const finalReport = calculateFinalScore(
+        //       securityHeaders,
+        //       data.summary
+        //     )
+        //     console.log("Security report:", finalReport)
 
-            if (finalReport.finalCategory) {
-              const currentTabId = details.tabId
+        //     chrome.storage.local.set({ report: finalReport })
 
-              const imageFileName = `${finalReport.finalCategory.toLowerCase()}`
-              chrome.action.setIcon({
-                path: {
-                  16: `${ICON_RELATIVE_PATH}${imageFileName}16.png`,
-                  32: `${ICON_RELATIVE_PATH}${imageFileName}32.png`,
-                  48: `${ICON_RELATIVE_PATH}${imageFileName}48.png`,
-                  128: `${ICON_RELATIVE_PATH}${imageFileName}128.png`
-                },
-                tabId: currentTabId
-              })
-            }
-          })
+        //     if (finalReport.finalCategory) {
+        //       const currentTabId = details.tabId
+
+        //       const imageFileName = `${finalReport.finalCategory.toLowerCase()}`
+        //       chrome.action.setIcon({
+        //         path: {
+        //           16: `${ICON_RELATIVE_PATH}${imageFileName}16.png`,
+        //           32: `${ICON_RELATIVE_PATH}${imageFileName}32.png`,
+        //           48: `${ICON_RELATIVE_PATH}${imageFileName}48.png`,
+        //           128: `${ICON_RELATIVE_PATH}${imageFileName}128.png`
+        //         },
+        //         tabId: currentTabId
+        //       })
+        //     }
+        //   })
       }
     },
     { urls: ["<all_urls>"], types: ["main_frame"] },
