@@ -2,6 +2,8 @@ function isRedirect(status: number) {
   return status >= 300 && status < 400
 }
 
+export const ICON_RELATIVE_PATH = "../../assets/"
+
 export const SECURITY_HEADERS = [
   "Content-Security-Policy",
   "Permissions-Policy",
@@ -255,6 +257,21 @@ export const logHeaders = () => {
               data.summary
             )
             console.log("Security report:", finalReport)
+
+            if (finalReport.finalCategory) {
+              const currentTabId = details.tabId
+
+              const imageFileName = `${finalReport.finalCategory.toLowerCase()}`
+              chrome.action.setIcon({
+                path: {
+                  16: `${ICON_RELATIVE_PATH}${imageFileName}16.png`,
+                  32: `${ICON_RELATIVE_PATH}${imageFileName}32.png`,
+                  48: `${ICON_RELATIVE_PATH}${imageFileName}48.png`,
+                  128: `${ICON_RELATIVE_PATH}${imageFileName}128.png`
+                },
+                tabId: currentTabId
+              })
+            }
           })
       }
     },
