@@ -179,12 +179,34 @@ function calculateSecurityHeadersScore(
   return { headers: headerDetails, overallScore: score, category }
 }
 
-function calculateFinalScore(securityHeaders: chrome.webRequest.HttpHeader[]) {
+const calculateDomainScore = (domainType: DomainAnalysisResult) => {
+  let score = 5
+  let category = "Robust"
+  if (domainType === "malicious") {
+    score = -1
+    category = "Low"
+  } else if (domainType === "unknown") {
+    score = 4
+    category = "Medium"
+  }
+
+  return { score, category }
+}
+
+export type DomainAnalysisResult = "benign" | "malicious" | "unknown"
+
+function calculateFinalScore(
+  securityHeaders: chrome.webRequest.HttpHeader[],
+  domainType: DomainAnalysisResult
+) {
   const securityHeadersReport = calculateSecurityHeadersScore(securityHeaders)
   const securityHeadersScore = securityHeadersReport.overallScore
 
+  const domainReport = calculateDomainScore(domainType)
+  const domainScore = domainReport.score
+
   // Calculate the average of the scores
-  const totalScore = securityHeadersScore / 1
+  const totalScore = (securityHeadersScore + domainScore) / 2
 
   // Normalize to a score out of 5 (already in that scale, so just rounding for precision)
   const normalizedScore = Math.round(totalScore * 10) / 10 // Rounds to one decimal place
@@ -202,7 +224,8 @@ function calculateFinalScore(securityHeaders: chrome.webRequest.HttpHeader[]) {
   return {
     finalScore: normalizedScore,
     finalCategory: category,
-    securityHeadersReport
+    securityHeadersReport,
+    domainReport
   }
 }
 
@@ -212,6 +235,8 @@ export const logHeaders = () => {
       if (!details.responseHeaders || isRedirect(details.statusCode)) {
         return
       }
+      const url = new URL(details.url)
+      const domain = url.hostname
       if (details.type === "main_frame") {
         const securityHeaders = details.responseHeaders.filter((header) =>
           SECURITY_HEADERS.map((header) => header.toLowerCase()).includes(
@@ -219,9 +244,18 @@ export const logHeaders = () => {
           )
         )
 
-        const finalReport = calculateFinalScore(securityHeaders)
-
-        console.log("Security report:", finalReport)
+        fetch(`http://localhost:3000/api/analyze/domain?q=${domain}`)
+          .then((res) => {
+            const result = res.json()
+            return result
+          })
+          .then((data) => {
+            const finalReport = calculateFinalScore(
+              securityHeaders,
+              data.summary
+            )
+            console.log("Security report:", finalReport)
+          })
       }
     },
     { urls: ["<all_urls>"], types: ["main_frame"] },
