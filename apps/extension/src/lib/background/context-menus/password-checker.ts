@@ -40,7 +40,7 @@ export const initializePasswordCheckerContextMenu = () => {
               chrome.tabs.sendMessage(tabId, {
                 type: MESSAGE_TYPES.VERIFY_PASSWORD_RESULT,
                 payload: {
-                  result: `Password is breached ${data.breachCount} times!`,
+                  result: `Password has been breached ${data.breachCount} times!`,
                   icon: "💀"
                 }
               })
