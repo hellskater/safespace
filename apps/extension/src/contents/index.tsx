@@ -1,3 +1,4 @@
+import { MESSAGE_TYPES } from "@/lib/background/constants"
 import { cn } from "@ui/lib/utils"
 // @ts-ignore
 import cssText from "data-text:@repo/ui/globals.css"
@@ -18,14 +19,37 @@ export const getStyle = () => {
 export const ContentIndex = () => {
   useEffect(() => {
     chrome.runtime?.onMessage.addListener((message) => {
-      if (message.type === "verifyLink") {
-        console.log("Link to verify:", message.linkUrl)
-        toast.success("Link verification started")
+      if (message.type === MESSAGE_TYPES.VERIFY_LINK_START) {
+        toast.loading("Verifying link...", {
+          id: MESSAGE_TYPES.VERIFY_LINK_START
+        })
+      } else if (message.type === MESSAGE_TYPES.VERIFY_LINK_RESULT) {
+        toast.success(message.payload.result, {
+          id: MESSAGE_TYPES.VERIFY_LINK_START,
+          icon: message.payload.icon
+        })
+      } else if (message.type === MESSAGE_TYPES.VERIFY_LINK_ERROR) {
+        toast.error("Failed to verify link!", {
+          id: MESSAGE_TYPES.VERIFY_LINK_START
+        })
+      } else if (message.type === MESSAGE_TYPES.VERIFY_PASSWORD_START) {
+        toast.loading("Verifying password...", {
+          id: MESSAGE_TYPES.VERIFY_PASSWORD_START
+        })
+      } else if (message.type === MESSAGE_TYPES.VERIFY_PASSWORD_RESULT) {
+        toast.success(message.payload.result, {
+          id: MESSAGE_TYPES.VERIFY_PASSWORD_START,
+          icon: message.payload.icon
+        })
+      } else if (message.type === MESSAGE_TYPES.VERIFY_PASSWORD_ERROR) {
+        toast.error("Failed to verify password!", {
+          id: MESSAGE_TYPES.VERIFY_PASSWORD_START
+        })
       }
     })
   }, [])
 
-  const baseToastStyles = "rounded-xl px-6 py-4 shadow-lg bg-white text-black"
+  const baseToastStyles = "rounded-xl px-5 py-3 shadow-lg bg-white text-black"
 
   return (
     <>

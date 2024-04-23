@@ -212,7 +212,7 @@ const calculateDomainScore = (domainType: DomainAnalysisResult) => {
   return { score, category }
 }
 
-export type DomainAnalysisResult = "benign" | "malicious" | "unknown"
+export type DomainAnalysisResult = "benign" | "malicious" | "suspicious" | "unknown"
 
 function calculateFinalScore(
   securityHeaders: chrome.webRequest.HttpHeader[],
