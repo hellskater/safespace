@@ -14,8 +14,6 @@ import "../styles/index.css"
 import CustomTooltip from "@ui/components/custom/custom-tooltip"
 import {
   AlertTriangle,
-  ExternalLink,
-  FileBarChart,
   InfoIcon,
   RefreshCcw,
   ShieldCheck,
@@ -64,82 +62,6 @@ const securityHeadersTooltipContent = (
     </p>
   </div>
 )
-
-const demoData = {
-  domainReport: {
-    category: "Medium",
-    name: "sriniously.xyz",
-    score: 4
-  },
-  finalCategory: "Medium",
-  finalScore: 2.5,
-  securityHeadersReport: {
-    category: "Low",
-    headers: {
-      "content-security-policy": {
-        category: "Low",
-        implemented: false,
-        negativeFeedback: [
-          "Missing Security Header: content-security-policy is not implemented."
-        ],
-        positiveFeedback: [],
-        score: -1,
-        value: ""
-      },
-      "permissions-policy": {
-        category: "Low",
-        implemented: false,
-        negativeFeedback: [
-          "Missing Security Header: permissions-policy is not implemented."
-        ],
-        positiveFeedback: [],
-        score: -1,
-        value: ""
-      },
-      "referrer-policy": {
-        category: "Low",
-        implemented: false,
-        negativeFeedback: [
-          "Missing Security Header: referrer-policy is not implemented."
-        ],
-        positiveFeedback: [],
-        score: -1,
-        value: ""
-      },
-      "strict-transport-security": {
-        category: "Low",
-        implemented: false,
-        negativeFeedback: [
-          "Missing Security Header: strict-transport-security is not implemented."
-        ],
-        positiveFeedback: [],
-        score: -1,
-        value: ""
-      },
-      "x-content-type-options": {
-        category: "Low",
-        implemented: false,
-        negativeFeedback: [
-          "Missing Security Header: x-content-type-options is not implemented."
-        ],
-        positiveFeedback: [],
-        score: -1,
-        value: ""
-      },
-      "x-frame-options": {
-        category: "Low",
-        implemented: false,
-        negativeFeedback: [
-          "Missing Security Header: x-frame-options is not implemented."
-        ],
-        positiveFeedback: [],
-        score: -1,
-        value: ""
-      }
-    },
-    overallScore: 1
-  }
-}
 
 function IndexPopup() {
   const [data, setData] = useState<SecurityReport | null>(null)
@@ -242,15 +164,6 @@ function IndexPopup() {
                 </p>
               </div>
             </div>
-            <div
-              onClick={() => {
-                chrome.tabs.create({ url: "./tabs/report.html" })
-              }}
-              className="text-sm text-white flex items-center gap-1 bg-purple-600 hover:bg-purple-700 transition-all duration-300 h-fit px-2 py-1 cursor-pointer rounded-xl">
-              <FileBarChart className="w-4 h-4" />
-              <p>Complete Report</p>
-              <ExternalLink className="w-4 h-4 ml-2" />
-            </div>
           </section>
 
           <section className="p-5 pt-0">
@@ -323,17 +236,17 @@ const SecurityHeaderCard = ({ header, report }: SecurityHeaderCardProps) => {
       .join(" ")
   }
 
-  const backgroundColor = (() => {
-    let color = "bg-gray-400"
+  const themeColor = (() => {
+    let color = "border-gray-400 text-gray-400"
 
     if (report.implemented) {
       color = match(report.category)
-        .with("Robust", () => "bg-green-500")
-        .with("Medium", () => "bg-yellow-500")
-        .with("Low", () => "bg-red-300")
-        .otherwise(() => "bg-gray-400")
+        .with("Robust", () => "border-green-500 text-green-500")
+        .with("Medium", () => "border-yellow-500 text-yellow-500")
+        .with("Low", () => "border-red-300 text-red-500")
+        .otherwise(() => "border-gray-400 text-gray-400")
     } else {
-      color = "bg-red-500"
+      color = "border-red-500 text-red-500"
     }
 
     return color
@@ -387,8 +300,8 @@ const SecurityHeaderCard = ({ header, report }: SecurityHeaderCardProps) => {
     <CustomTooltip content={tooltipContent}>
       <div
         className={cn(
-          backgroundColor,
-          "py-1 px-2 text-white font-semibold rounded-lg"
+          themeColor,
+          "py-1 px-2 rounded-lg border"
         )}>
         <p>{capitalizeFirstLetterOfEachWord(header)}</p>
       </div>

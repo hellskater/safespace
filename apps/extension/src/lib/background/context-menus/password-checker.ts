@@ -1,3 +1,7 @@
+import {
+  getPasswordResultFromCache,
+  savePasswordResultToCache
+} from "@/lib/cache/password-cache"
 import { match } from "ts-pattern"
 
 import { MESSAGE_TYPES } from "../constants"
@@ -29,37 +33,82 @@ export const initializePasswordCheckerContextMenu = () => {
 
       const password = info.selectionText
 
-      fetch(`http://localhost:3000/api/analyze/password?q=${password}`)
-        .then((res) => {
-          const result = res.json()
-          return result
+      if (!password) {
+        chrome.tabs.sendMessage(tabId, {
+          type: MESSAGE_TYPES.VERIFY_PASSWORD_ERROR
         })
-        .then((data: PasswordAnalysisResult) => {
-          match(data.isBreached)
-            .with(true, () => {
-              chrome.tabs.sendMessage(tabId, {
-                type: MESSAGE_TYPES.VERIFY_PASSWORD_RESULT,
-                payload: {
-                  result: `Password has been breached ${data.breachCount} times!`,
-                  icon: "💀"
+        return
+      }
+
+      getPasswordResultFromCache(password).then((cachedResult) => {
+        let finalResult: null | PasswordAnalysisResult = null
+
+        console.log("cachedResult", cachedResult)
+
+        if (cachedResult) {
+          finalResult = cachedResult
+
+          if (finalResult) {
+            match(finalResult.isBreached)
+              .with(true, () => {
+                chrome.tabs.sendMessage(tabId, {
+                  type: MESSAGE_TYPES.VERIFY_PASSWORD_RESULT,
+                  payload: {
+                    result: `Password has been breached ${finalResult?.breachCount} times!`,
+                    icon: "💀"
+                  }
+                })
+              })
+              .with(false, () => {
+                chrome.tabs.sendMessage(tabId, {
+                  type: MESSAGE_TYPES.VERIFY_PASSWORD_RESULT,
+                  payload: {
+                    result: "Password is safe!",
+                    icon: "🔒"
+                  }
+                })
+              })
+          }
+        } else {
+          fetch(`http://localhost:3000/api/analyze/password?q=${password}`)
+            .then((res) => {
+              const result = res.json()
+              return result
+            })
+            .then((data: PasswordAnalysisResult) => {
+              savePasswordResultToCache(password, data).then(() => {
+                finalResult = data
+
+                if (finalResult) {
+                  match(finalResult.isBreached)
+                    .with(true, () => {
+                      chrome.tabs.sendMessage(tabId, {
+                        type: MESSAGE_TYPES.VERIFY_PASSWORD_RESULT,
+                        payload: {
+                          result: `Password has been breached ${finalResult?.breachCount} times!`,
+                          icon: "💀"
+                        }
+                      })
+                    })
+                    .with(false, () => {
+                      chrome.tabs.sendMessage(tabId, {
+                        type: MESSAGE_TYPES.VERIFY_PASSWORD_RESULT,
+                        payload: {
+                          result: "Password is safe!",
+                          icon: "🔒"
+                        }
+                      })
+                    })
                 }
               })
             })
-            .with(false, () => {
+            .catch(() => {
               chrome.tabs.sendMessage(tabId, {
-                type: MESSAGE_TYPES.VERIFY_PASSWORD_RESULT,
-                payload: {
-                  result: "Password is safe!",
-                  icon: "🔒"
-                }
+                type: MESSAGE_TYPES.VERIFY_PASSWORD_ERROR
               })
             })
-        })
-        .catch(() => {
-          chrome.tabs.sendMessage(tabId, {
-            type: MESSAGE_TYPES.VERIFY_PASSWORD_ERROR
-          })
-        })
+        }
+      })
     }
   })
 }

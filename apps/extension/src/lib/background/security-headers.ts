@@ -1,3 +1,8 @@
+import {
+  getDomainResultFromCache,
+  saveDomainResultToCache
+} from "../cache/domain-cache"
+
 function isRedirect(status: number) {
   return status >= 300 && status < 400
 }
@@ -212,7 +217,11 @@ const calculateDomainScore = (domainType: DomainAnalysisResult) => {
   return { score, category }
 }
 
-export type DomainAnalysisResult = "benign" | "malicious" | "suspicious" | "unknown"
+export type DomainAnalysisResult =
+  | "benign"
+  | "malicious"
+  | "suspicious"
+  | "unknown"
 
 function calculateFinalScore(
   securityHeaders: chrome.webRequest.HttpHeader[],
@@ -270,39 +279,70 @@ export const logHeaders = () => {
           )
         )
 
-        // fetch(`http://localhost:3000/api/analyze/domain?q=${domain}`)
-        //   .then((res) => {
-        //     const result = res.json()
-        //     return result
-        //   })
-        //   .then((data: { summary: DomainAnalysisResult }) => {
-        //     const finalReport = calculateFinalScore(securityHeaders, {
-        //       name: domain,
-        //       type: data.summary
-        //     })
-        //     console.log("Security report:", finalReport)
+        getDomainResultFromCache(domain).then((cachedResult) => {
+          let finalReport = null
+          if (cachedResult) {
+            finalReport = calculateFinalScore(securityHeaders, {
+              name: domain,
+              type: cachedResult.summary
+            })
 
-        //     chrome.storage.local.set({
-        //       [domain]: {
-        //         report: finalReport
-        //       }
-        //     })
+            if (finalReport) {
+              console.log("Security report:", finalReport)
+              chrome.storage.local.set({
+                [domain]: { report: finalReport }
+              })
 
-        //     if (finalReport.finalCategory) {
-        //       const currentTabId = details.tabId
+              if (finalReport.finalCategory) {
+                const currentTabId = details.tabId
+                const imageFileName = `${finalReport.finalCategory.toLowerCase()}`
+                chrome.action.setIcon({
+                  path: {
+                    16: `${ICON_RELATIVE_PATH}${imageFileName}16.png`,
+                    32: `${ICON_RELATIVE_PATH}${imageFileName}32.png`,
+                    48: `${ICON_RELATIVE_PATH}${imageFileName}48.png`,
+                    128: `${ICON_RELATIVE_PATH}${imageFileName}128.png`
+                  },
+                  tabId: currentTabId
+                })
+              }
+            }
+          } else {
+            fetch(`http://localhost:3000/api/analyze/domain?q=${domain}`)
+              .then((res) => res.json())
+              .then(
+                (data: { summary: DomainAnalysisResult; score: number }) => {
+                  saveDomainResultToCache(domain, data).then(() => {
+                    finalReport = calculateFinalScore(securityHeaders, {
+                      name: domain,
+                      type: data.summary
+                    })
 
-        //       const imageFileName = `${finalReport.finalCategory.toLowerCase()}`
-        //       chrome.action.setIcon({
-        //         path: {
-        //           16: `${ICON_RELATIVE_PATH}${imageFileName}16.png`,
-        //           32: `${ICON_RELATIVE_PATH}${imageFileName}32.png`,
-        //           48: `${ICON_RELATIVE_PATH}${imageFileName}48.png`,
-        //           128: `${ICON_RELATIVE_PATH}${imageFileName}128.png`
-        //         },
-        //         tabId: currentTabId
-        //       })
-        //     }
-        //   })
+                    if (finalReport) {
+                      console.log("Security report:", finalReport)
+                      chrome.storage.local.set({
+                        [domain]: { report: finalReport }
+                      })
+
+                      if (finalReport.finalCategory) {
+                        const currentTabId = details.tabId
+                        const imageFileName = `${finalReport.finalCategory.toLowerCase()}`
+                        chrome.action.setIcon({
+                          path: {
+                            16: `${ICON_RELATIVE_PATH}${imageFileName}16.png`,
+                            32: `${ICON_RELATIVE_PATH}${imageFileName}32.png`,
+                            48: `${ICON_RELATIVE_PATH}${imageFileName}48.png`,
+                            128: `${ICON_RELATIVE_PATH}${imageFileName}128.png`
+                          },
+                          tabId: currentTabId
+                        })
+                      }
+                    }
+                  })
+                }
+              )
+          }
+        })
       }
     },
     { urls: ["<all_urls>"], types: ["main_frame"] },
