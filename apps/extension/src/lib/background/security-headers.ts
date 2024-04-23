@@ -22,8 +22,8 @@ export type SecurityReport = {
       {
         implemented: boolean
         score: number
+        value: string
         category: "Robust" | "Medium" | "Low"
-        actionableFeedback: string[]
         positiveFeedback: string[]
         negativeFeedback: string[]
       }
@@ -32,6 +32,7 @@ export type SecurityReport = {
     category: "Robust" | "Medium" | "Low"
   }
   domainReport: {
+    name: string
     score: number
     category: "Robust" | "Medium" | "Low"
   }
@@ -46,8 +47,8 @@ function calculateSecurityHeadersScore(
     {
       implemented: boolean
       score: number
+      value: string
       category: string
-      actionableFeedback: string[]
       positiveFeedback: string[]
       negativeFeedback: string[]
     }
@@ -58,8 +59,8 @@ function calculateSecurityHeadersScore(
     headerDetails[header.toLowerCase()] = {
       implemented: false,
       score: 0,
+      value: "",
       category: "",
-      actionableFeedback: [],
       positiveFeedback: [],
       negativeFeedback: []
     }
@@ -70,6 +71,7 @@ function calculateSecurityHeadersScore(
     if (headerDetails.hasOwnProperty(headerName)) {
       const targetHeader = headerDetails[headerName]
       if (targetHeader) {
+        targetHeader.value = header.value || ""
         targetHeader.implemented = true // Mark this header as observed
         let headerScore = 0
 
@@ -90,9 +92,6 @@ function calculateSecurityHeadersScore(
               targetHeader.negativeFeedback.push(
                 "Insecure CSP: Includes 'unsafe-inline', 'unsafe-eval', or '*'."
               )
-              targetHeader.actionableFeedback.push(
-                "Consider removing 'unsafe-inline', 'unsafe-eval', or '*' from the CSP."
-              )
             }
             break
           case "permissions-policy":
@@ -109,9 +108,6 @@ function calculateSecurityHeadersScore(
               headerScore -= 2
               targetHeader.negativeFeedback.push(
                 "Overly permissive Permissions-Policy: Allows all features."
-              )
-              targetHeader.actionableFeedback.push(
-                "Consider restricting the Permissions-Policy to only the necessary features."
               )
             }
             break
@@ -172,9 +168,6 @@ function calculateSecurityHeadersScore(
       targetHeader.negativeFeedback.push(
         `Missing Security Header: ${header} is not implemented.`
       )
-      targetHeader.actionableFeedback.push(
-        `Consider implementing the ${header} header.`
-      )
     }
 
     if (targetHeader) {
@@ -223,12 +216,15 @@ export type DomainAnalysisResult = "benign" | "malicious" | "unknown"
 
 function calculateFinalScore(
   securityHeaders: chrome.webRequest.HttpHeader[],
-  domainType: DomainAnalysisResult
+  domainData: {
+    name: string
+    type: DomainAnalysisResult
+  }
 ) {
   const securityHeadersReport = calculateSecurityHeadersScore(securityHeaders)
   const securityHeadersScore = securityHeadersReport.overallScore
 
-  const domainReport = calculateDomainScore(domainType)
+  const domainReport = calculateDomainScore(domainData.type)
   const domainScore = domainReport.score
 
   // Calculate the average of the scores
@@ -251,7 +247,11 @@ function calculateFinalScore(
     finalScore: normalizedScore,
     finalCategory: category,
     securityHeadersReport,
-    domainReport
+    domainReport: {
+      name: domainData.name,
+      score: domainScore,
+      category: domainReport.category
+    }
   }
 }
 
@@ -275,14 +275,18 @@ export const logHeaders = () => {
         //     const result = res.json()
         //     return result
         //   })
-        //   .then((data) => {
-        //     const finalReport = calculateFinalScore(
-        //       securityHeaders,
-        //       data.summary
-        //     )
+        //   .then((data: { summary: DomainAnalysisResult }) => {
+        //     const finalReport = calculateFinalScore(securityHeaders, {
+        //       name: domain,
+        //       type: data.summary
+        //     })
         //     console.log("Security report:", finalReport)
 
-        //     chrome.storage.local.set({ report: finalReport })
+        //     chrome.storage.local.set({
+        //       [domain]: {
+        //         report: finalReport
+        //       }
+        //     })
 
         //     if (finalReport.finalCategory) {
         //       const currentTabId = details.tabId

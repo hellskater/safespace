@@ -1,5 +1,5 @@
 {
-  "extends": "@repo/typescript-config/react-library.json",
+  "extends": "@repo/typescript-config/extension.json",
   "compilerOptions": {
     "lib": ["esnext", "dom", "dom.iterable", "webworker"],
     "baseUrl": "./src",
@@ -15,5 +15,5 @@
     "**/*.tsx",
     ".next/types/**/*.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "build"]
 }

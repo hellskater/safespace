@@ -12,9 +12,11 @@
   },
   "dependencies": {
     "@repo/ui": "workspace:*",
+    "lucide-react": "^0.314.0",
     "plasmo": "0.85.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-hot-toast": "^2.4.1",
     "ts-pattern": "^5.1.1"
   },
   "devDependencies": {
@@ -36,8 +38,9 @@
   "manifest": {
     "permissions": [
       "webRequest",
-      "action",
-      "storage"
+      "storage",
+      "cookies",
+      "contextMenus"
     ],
     "web_accessible_resources": [
       {
