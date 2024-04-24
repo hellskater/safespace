@@ -151,6 +151,9 @@ importers:
       '@repo/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      crypto-js:
+        specifier: ^4.2.0
+        version: 4.2.0
       drizzle-orm:
         specifier: ^0.30.9
         version: 0.30.9(@neondatabase/serverless@0.9.1)(@types/react@18.2.48)(react@18.2.0)
@@ -179,6 +182,9 @@ importers:
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config
+      '@types/crypto-js':
+        specifier: ^4.2.2
+        version: 4.2.2
       '@types/node':
         specifier: ^20
         version: 20.11.6
@@ -3727,6 +3733,10 @@ packages:
     dependencies:
       '@types/filesystem': 0.0.36
       '@types/har-format': 1.2.15
+    dev: true
+
+  /@types/crypto-js@4.2.2:
+    resolution: {integrity: sha512-sDOLlVbHhXpAUAL0YHDUUwDZf3iN4Bwi4W6a0W0b+QcAezUbRtH4FVb+9J4h+XFPW7l/gQ9F8qC7P+Ec4k8QVQ==}
     dev: true
 
   /@types/eslint@8.56.2:
