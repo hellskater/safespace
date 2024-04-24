@@ -43,31 +43,11 @@ export const initializePasswordCheckerContextMenu = () => {
       getPasswordResultFromCache(password).then((cachedResult) => {
         let finalResult: null | PasswordAnalysisResult = null
 
-        console.log("cachedResult", cachedResult)
-
         if (cachedResult) {
           finalResult = cachedResult
 
           if (finalResult) {
-            match(finalResult.isBreached)
-              .with(true, () => {
-                chrome.tabs.sendMessage(tabId, {
-                  type: MESSAGE_TYPES.VERIFY_PASSWORD_RESULT,
-                  payload: {
-                    result: `Password has been breached ${finalResult?.breachCount} times!`,
-                    icon: "💀"
-                  }
-                })
-              })
-              .with(false, () => {
-                chrome.tabs.sendMessage(tabId, {
-                  type: MESSAGE_TYPES.VERIFY_PASSWORD_RESULT,
-                  payload: {
-                    result: "Password is safe!",
-                    icon: "🔒"
-                  }
-                })
-              })
+            performFinalAction(finalResult, tabId)
           }
         } else {
           fetch(`http://localhost:3000/api/analyze/password?q=${password}`)
@@ -80,25 +60,7 @@ export const initializePasswordCheckerContextMenu = () => {
                 finalResult = data
 
                 if (finalResult) {
-                  match(finalResult.isBreached)
-                    .with(true, () => {
-                      chrome.tabs.sendMessage(tabId, {
-                        type: MESSAGE_TYPES.VERIFY_PASSWORD_RESULT,
-                        payload: {
-                          result: `Password has been breached ${finalResult?.breachCount} times!`,
-                          icon: "💀"
-                        }
-                      })
-                    })
-                    .with(false, () => {
-                      chrome.tabs.sendMessage(tabId, {
-                        type: MESSAGE_TYPES.VERIFY_PASSWORD_RESULT,
-                        payload: {
-                          result: "Password is safe!",
-                          icon: "🔒"
-                        }
-                      })
-                    })
+                  performFinalAction(finalResult, tabId)
                 }
               })
             })
@@ -111,4 +73,29 @@ export const initializePasswordCheckerContextMenu = () => {
       })
     }
   })
+}
+
+function performFinalAction(
+  finalResult: PasswordAnalysisResult,
+  tabId: number
+) {
+  match(finalResult.isBreached)
+    .with(true, () => {
+      chrome.tabs.sendMessage(tabId, {
+        type: MESSAGE_TYPES.VERIFY_PASSWORD_RESULT,
+        payload: {
+          result: `Password has been breached ${finalResult?.breachCount} times!`,
+          icon: "💀"
+        }
+      })
+    })
+    .with(false, () => {
+      chrome.tabs.sendMessage(tabId, {
+        type: MESSAGE_TYPES.VERIFY_PASSWORD_RESULT,
+        payload: {
+          result: "Password is safe!",
+          icon: "🔒"
+        }
+      })
+    })
 }

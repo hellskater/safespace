@@ -53,7 +53,7 @@ function calculateSecurityHeadersScore(
       implemented: boolean
       score: number
       value: string
-      category: string
+      category: "Robust" | "Medium" | "Low"
       positiveFeedback: string[]
       negativeFeedback: string[]
     }
@@ -65,7 +65,7 @@ function calculateSecurityHeadersScore(
       implemented: false,
       score: 0,
       value: "",
-      category: "",
+      category: "" as "Robust" | "Medium" | "Low",
       positiveFeedback: [],
       negativeFeedback: []
     }
@@ -191,7 +191,7 @@ function calculateSecurityHeadersScore(
   score = Math.max(1, Math.min(Math.floor((score / 18) * 5), 5))
 
   // Determine the security level category
-  let category
+  let category: "Robust" | "Medium" | "Low"
   if (score >= 4) {
     category = "Robust"
   } else if (score >= 2) {
@@ -205,7 +205,7 @@ function calculateSecurityHeadersScore(
 
 const calculateDomainScore = (domainType: DomainAnalysisResult) => {
   let score = 5
-  let category = "Robust"
+  let category: "Robust" | "Medium" | "Low" = "Robust"
   if (domainType === "malicious") {
     score = -1
     category = "Low"
@@ -229,7 +229,7 @@ function calculateFinalScore(
     name: string
     type: DomainAnalysisResult
   }
-) {
+): SecurityReport {
   const securityHeadersReport = calculateSecurityHeadersScore(securityHeaders)
   const securityHeadersScore = securityHeadersReport.overallScore
 
@@ -243,7 +243,7 @@ function calculateFinalScore(
   const normalizedScore = Math.round(totalScore * 10) / 10 // Rounds to one decimal place
 
   // Determine the category based on the final score
-  let category
+  let category: "Robust" | "Medium" | "Low"
   if (normalizedScore >= 4) {
     category = "Robust"
   } else if (normalizedScore >= 2) {
@@ -288,24 +288,7 @@ export const logHeaders = () => {
             })
 
             if (finalReport) {
-              console.log("Security report:", finalReport)
-              chrome.storage.local.set({
-                [domain]: { report: finalReport }
-              })
-
-              if (finalReport.finalCategory) {
-                const currentTabId = details.tabId
-                const imageFileName = `${finalReport.finalCategory.toLowerCase()}`
-                chrome.action.setIcon({
-                  path: {
-                    16: `${ICON_RELATIVE_PATH}${imageFileName}16.png`,
-                    32: `${ICON_RELATIVE_PATH}${imageFileName}32.png`,
-                    48: `${ICON_RELATIVE_PATH}${imageFileName}48.png`,
-                    128: `${ICON_RELATIVE_PATH}${imageFileName}128.png`
-                  },
-                  tabId: currentTabId
-                })
-              }
+              performFinalAction(finalReport, domain, details)
             }
           } else {
             fetch(`http://localhost:3000/api/analyze/domain?q=${domain}`)
@@ -319,24 +302,7 @@ export const logHeaders = () => {
                     })
 
                     if (finalReport) {
-                      console.log("Security report:", finalReport)
-                      chrome.storage.local.set({
-                        [domain]: { report: finalReport }
-                      })
-
-                      if (finalReport.finalCategory) {
-                        const currentTabId = details.tabId
-                        const imageFileName = `${finalReport.finalCategory.toLowerCase()}`
-                        chrome.action.setIcon({
-                          path: {
-                            16: `${ICON_RELATIVE_PATH}${imageFileName}16.png`,
-                            32: `${ICON_RELATIVE_PATH}${imageFileName}32.png`,
-                            48: `${ICON_RELATIVE_PATH}${imageFileName}48.png`,
-                            128: `${ICON_RELATIVE_PATH}${imageFileName}128.png`
-                          },
-                          tabId: currentTabId
-                        })
-                      }
+                      performFinalAction(finalReport, domain, details)
                     }
                   })
                 }
@@ -348,4 +314,28 @@ export const logHeaders = () => {
     { urls: ["<all_urls>"], types: ["main_frame"] },
     ["responseHeaders", "extraHeaders"]
   )
+}
+function performFinalAction(
+  finalReport: SecurityReport,
+  domain: string,
+  details: chrome.webRequest.WebResponseHeadersDetails
+) {
+  console.log("Security report:", finalReport)
+  chrome.storage.local.set({
+    [domain]: { report: finalReport }
+  })
+
+  if (finalReport.finalCategory) {
+    const currentTabId = details.tabId
+    const imageFileName = `${finalReport.finalCategory.toLowerCase()}`
+    chrome.action.setIcon({
+      path: {
+        16: `${ICON_RELATIVE_PATH}${imageFileName}16.png`,
+        32: `${ICON_RELATIVE_PATH}${imageFileName}32.png`,
+        48: `${ICON_RELATIVE_PATH}${imageFileName}48.png`,
+        128: `${ICON_RELATIVE_PATH}${imageFileName}128.png`
+      },
+      tabId: currentTabId
+    })
+  }
 }
