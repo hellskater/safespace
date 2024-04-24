@@ -13,14 +13,18 @@
   "dependencies": {
     "@neondatabase/serverless": "^0.9.1",
     "@pangeacyber/react-auth": "^0.0.12",
+    "@react-hook/size": "^2.1.2",
     "@repo/ui": "workspace:*",
     "crypto-js": "^4.2.0",
     "drizzle-orm": "^0.30.9",
+    "framer-motion": "^11.1.7",
     "next": "14.2.2",
     "pangea-node-sdk": "^3.7.0",
     "react": "^18",
     "react-dom": "^18",
+    "react-intersection-observer": "^9.8.2",
     "ts-pattern": "^5.1.1",
+    "usehooks-ts": "^3.1.0",
     "zod": "^3.23.4"
   },
   "devDependencies": {

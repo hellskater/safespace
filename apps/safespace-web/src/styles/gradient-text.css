@@ -1,0 +1,39 @@
+@layer components {
+  .gradient-text {
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    display: inline-block;
+  }
+
+  .violet-gradient-text {
+    @apply bg-violet-gradient gradient-text;
+  }
+
+  .orange-gradient-text {
+    @apply bg-orange-gradient gradient-text;
+  }
+
+  .green-gradient-text {
+    @apply bg-green-gradient gradient-text;
+  }
+
+  .with-violet-gradient-text {
+    span {
+      @apply violet-gradient-text;
+    }
+  }
+
+  .with-orange-gradient-text {
+    span {
+      @apply orange-gradient-text;
+    }
+  }
+
+  .with-green-gradient-text {
+    span {
+      @apply green-gradient-text;
+    }
+  }
+}

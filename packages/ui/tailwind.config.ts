@@ -77,7 +77,7 @@ const config = {
       },
     },
   },
-  plugins: [tailwindcssAnimate],
+  plugins: [tailwindcssAnimate, require("tailwindcss-safe-area")],
 } satisfies Config;
 
 export default config;

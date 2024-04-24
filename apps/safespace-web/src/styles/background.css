@@ -1,0 +1,13 @@
+@layer utilities {
+  .bg-violet-gradient {
+    background-image: linear-gradient(264.04deg, #f14aff 15.67%, #401aff 82.95%);
+  }
+
+  .bg-orange-gradient {
+    background-image: linear-gradient(267.19deg, #ffe600 4.02%, #fd6a00 73.58%);
+  }
+
+  .bg-green-gradient {
+    background-image: linear-gradient(268.85deg, #57f906 -0.04%, #00ccc0 59.56%);
+  }
+}

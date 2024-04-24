@@ -1,5 +1,6 @@
 "use client";
 
+import LandingPage from "@/components/landing";
 import { animateTextChange } from "@/utils/encryption";
 import { useEffect, useState } from "react";
 
@@ -12,8 +13,8 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="h-screen w-screen flex items-center flex-col justify-center">
-      <p
+    <div className="text-white">
+      {/* <p
         onMouseOver={() => {
           animateTextChange(setText, originalText, false);
         }}
@@ -22,7 +23,8 @@ export default function Home() {
         }}
       >
         {text}
-      </p>
+      </p> */}
+      <LandingPage />
     </div>
   );
 }
