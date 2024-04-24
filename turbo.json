@@ -13,7 +13,14 @@
     "dev": {
       "cache": false,
       "persistent": true,
-      "env": ["PANGEA_DOMAIN", "PANGEA_TOKEN"]
+      "env": [
+        "PANGEA_DOMAIN",
+        "PANGEA_TOKEN",
+        "NEXT_PUBLIC_PANGEA_DOMAIN",
+        "NEXT_PUBLIC_PANGEA_CLIENT_TOKEN",
+        "NEXT_PUBLIC_PANGEA_LOGIN_URL",
+        "NEON_DATABASE_URL"
+      ]
     }
   }
 }
