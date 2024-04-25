@@ -6,8 +6,11 @@ export const UserDtoSchema = z.object({
   firstName: z.string(),
   lastName: z.string(),
   imageUrl: z.string(),
+  isEncryptionTokenGenerated: z.boolean(),
+  encryptionKeyId: z.string(),
+  pangeaId: z.string(),
   createdAt: z.string(),
   updatedAt: z.string(),
 });
 
-export type UserDto = z.infer<typeof UserDtoSchema>;
+export type UserType = z.infer<typeof UserDtoSchema>;

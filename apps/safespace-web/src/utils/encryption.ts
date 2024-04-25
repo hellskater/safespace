@@ -1,3 +1,5 @@
+import CryptoJS from "crypto-js";
+
 export const animateTextChange = (
   setText: (text: string) => void,
   finalText: string,
@@ -45,4 +47,9 @@ export const animateTextChange = (
       setText(finalText);
     }
   }, iterations * interval);
+};
+
+export const generateSymmetricKey = () => {
+  // AES requires a key that can be 128, 192, or 256 bits long; here we use 256 bits.
+  return CryptoJS.lib.WordArray.random(256 / 8).toString(CryptoJS.enc.Hex);
 };

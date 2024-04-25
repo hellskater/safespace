@@ -107,8 +107,6 @@ function IndexPopup() {
 
   const securityHeadersInfo = data?.securityHeadersReport.headers
 
-  console.log(data)
-
   return (
     <div className={cn(DEFAULT_LAYOUT_STYLES)}>
       <section
@@ -298,11 +296,7 @@ const SecurityHeaderCard = ({ header, report }: SecurityHeaderCardProps) => {
 
   return (
     <CustomTooltip content={tooltipContent}>
-      <div
-        className={cn(
-          themeColor,
-          "py-1 px-2 rounded-lg border"
-        )}>
+      <div className={cn(themeColor, "py-1 px-2 rounded-lg border")}>
         <p>{capitalizeFirstLetterOfEachWord(header)}</p>
       </div>
     </CustomTooltip>

@@ -1,7 +1,5 @@
 /* Base */
 @import "./global.css";
-@import "./grid-gap.css";
-@import "./link.css";
 
 /* Components */
 @import "./container.css";

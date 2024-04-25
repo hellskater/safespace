@@ -5,16 +5,25 @@ import { Button } from "@ui/components/ui/button";
 import Link from "next/link";
 import React from "react";
 import { LogOut, LogIn } from "lucide-react";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
+import Cookies from "js-cookie";
 
 const Header = () => {
-  const { authenticated, login, logout, user, refresh } = useAuth();
+  const { authenticated, login, logout } = useAuth();
+
+  const router = useRouter();
 
   const handleLogout = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    localStorage.removeItem("sessionTimeout");
+    localStorage.removeItem("safespace_user_profile");
     logout();
+    router.push("/");
+    toast.success("Logout successful", {
+      id: "logout",
+    });
   };
-
-  console.log(user);
 
   return (
     <header className="safe-paddings absolute inset-x-0 top-0 z-50 p-5">
@@ -36,7 +45,13 @@ const Header = () => {
               <p>Logout</p>
             </Button>
           ) : (
-            <Button className="flex items-center gap-2" onClick={login}>
+            <Button
+              className="flex items-center gap-2"
+              onClick={() => {
+                Cookies.set("initiatingLogin", "true");
+                login();
+              }}
+            >
               <LogIn className="w-4 h-4" />
               <p>Login</p>
             </Button>

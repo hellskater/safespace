@@ -15,7 +15,6 @@ const Section1 = () => {
 
   useEffect(() => {
     if (inView && !isAlreadyViewed.current) {
-      console.log({ inView, isAlreadyViewed });
       animateTextChange(setText, originalText, true);
       isAlreadyViewed.current = true;
     }

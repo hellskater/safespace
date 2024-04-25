@@ -320,7 +320,6 @@ function performFinalAction(
   domain: string,
   details: chrome.webRequest.WebResponseHeadersDetails
 ) {
-  console.log("Security report:", finalReport)
   chrome.storage.local.set({
     [domain]: { report: finalReport }
   })
