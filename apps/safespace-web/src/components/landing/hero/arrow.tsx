@@ -72,7 +72,7 @@ const Arrow = ({
   const { svgWidth, svgHeight, d1, d2, d3 } = svgParams;
   return (
     <svg
-      className="absolute right-40 top-[calc(100%+0.5rem)] -z-10 lg:right-24 xl:right-10 xl:w-[800px] 2xl:right-0 2xl:w-[1000px] lg:top-full lg:h-auto lg:w-[600px] md:right-24 md:w-[400px] sm:left-48 sm:top-[calc(100%-3rem)] sm:block sm:w-[183px] xs:top-[calc(100%-2.5rem)] xs:w-[130px]"
+      className="absolute -z-10 right-10 w-[800px] 2xl:right-0 2xl:w-[900px] h-28"
       width={svgWidth}
       height={svgHeight}
       viewBox={`0 0 ${svgWidth} ${svgHeight}`}

@@ -20,7 +20,7 @@ interface RandomString {
 }
 
 const getRandomString: RandomString = (length: number) => {
-  const digits = "ABCDEF0123456789!@#$%&*+=<>?/";
+  const digits = "ABCDEF0123456789";
   let string = "";
   const random = Math.random();
   const randomStr = digits.charAt(random * digits.length || 0);

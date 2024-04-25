@@ -4,6 +4,8 @@ import "@repo/ui/globals.css";
 import "../styles/main.css";
 import PangeaAuthProvider from "@/components/providers/auth-provider";
 import Header from "@/components/header";
+import { cn } from "@ui/lib/utils";
+import Footer from "@/components/footer/footer";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -22,11 +24,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={poppins.className}>
+      <body className={cn(poppins.className, "max-w-[85rem] mx-auto relative")}>
         <PangeaAuthProvider>
           <>
             <Header />
             {children}
+            <Footer />
           </>
         </PangeaAuthProvider>
       </body>

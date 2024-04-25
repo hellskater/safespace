@@ -1,5 +1,6 @@
+import { animateTextChange } from "@/utils/encryption";
 import { AnimationControls, motion } from "framer-motion";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 export const OPACITY_DURATION = 0.06;
 export const BG_DURATION = 0.15;
@@ -14,17 +15,22 @@ const textGradientStyles = {
 
 const titleItems = [
   {
-    value: "Protect.",
     background: "linear-gradient(264.04deg, #f14aff 15.67%, #401aff 82.95%)",
   },
   {
-    value: "Your.",
     background: "linear-gradient(267.19deg, #ffe600 4.02%, #fd6a00 73.58%)",
   },
   {
-    value: "Thoughts.",
     background: "linear-gradient(268.85deg, #57f906 -0.04%, #00ccc0 59.56%)",
   },
+] as const;
+
+const orginalTexts = [
+  "Prioritize Privacy",
+  "Protect.",
+  "Your.",
+  "Thoughts.",
+  "Now",
 ];
 
 const itemVariants = {
@@ -59,13 +65,20 @@ const itemVariants = {
 };
 
 const Title = ({ titleControls }: { titleControls: AnimationControls }) => {
+  const [texts, setTexts] = useState([
+    "P1x@9z3!e Q5v#7y%", // Prioritize Privacy
+    "Pl$v3hk.", // Protect.
+    "m&is.", // Your.
+    "z!un9stk.", // Thoughts.
+    "l&x", // Now
+  ]);
+
   const itemsWithAnimationData = useMemo(() => {
     let previousDelay = 0;
     return titleItems.map((item, index) => {
       if (index !== 0) previousDelay += OPACITY_DURATION;
 
       const newItem: {
-        value: string;
         background: string;
         delay: {
           opacity: number;
@@ -85,28 +98,46 @@ const Title = ({ titleControls }: { titleControls: AnimationControls }) => {
     });
   }, []);
 
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+
+    timer = setTimeout(() => {
+      texts.forEach((_, index) => {
+        const handler = (val: string) => {
+          setTexts((prev) => {
+            const newItems = [...prev];
+            newItems[index] = val;
+            return newItems;
+          });
+        };
+        timer = setTimeout(() => {
+          animateTextChange(handler, orginalTexts[index]!, false);
+        }, index * 1000);
+      });
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <h1 className="flex flex-col text-[38px] font-extrabold uppercase leading-none text-stone-800 lg:text-3xl lg:leading-none md:text-2xl md:leading-none sm:text-[22px] sm:leading-none">
-      <span className="relative z-10 mr-auto mb-1.5 bg-white px-2.5 py-2.5 sm:px-4">
-        Prioritize Privacy
+    <h1 className="flex flex-col font-extrabold leading-none text-stone-800 text-2xl lg:text-3xl xl:text-4xl">
+      <span className="relative z-10 w-fit mb-1.5 bg-white px-2.5 py-2.5">
+        {texts[0]}
       </span>
-      <motion.span
-        className="-my-1.5 space-x-5 bg-white text-[8.6rem] text-stone-800 lg:space-x-2.5 lg:text-[106px] md:text-[80px] sm:flex sm:flex-wrap sm:space-x-0 sm:px-4 sm:text-[68px] xs:text-6xl xs:leading-none"
-        initial="initial"
-      >
-        {itemsWithAnimationData.map(({ value, background, delay }, index) => (
+      <span className="my-2 xl:space-x-5 bg-white text-stone-800 lg:space-x-2.5 flex flex-wrap space-x-0 px-2.5 leading-normal text-5xl lg:text-7xl xl:text-9xl">
+        {itemsWithAnimationData.map(({ background, delay }, index) => (
           <motion.span
             key={index}
-            dangerouslySetInnerHTML={{ __html: value }}
+            dangerouslySetInnerHTML={{ __html: texts[index + 1]! }}
             initial="initial"
             variants={itemVariants}
             animate={titleControls}
             custom={{ background, delay }}
           />
         ))}
-      </motion.span>
-      <span className="mt-1.5 bg-white px-2.5 py-2.5 sm:mr-auto sm:ml-0 sm:px-4">
-        NOW
+      </span>
+      <span className="mt-1.5 bg-white uppercase px-2.5 py-2.5 w-fit">
+        {texts[4]}
       </span>
     </h1>
   );
