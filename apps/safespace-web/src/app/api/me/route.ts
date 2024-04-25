@@ -11,20 +11,8 @@ import { z } from "zod";
 // GET /api/me –get the user's profile
 export const GET = async ({}: Request) => {
   try {
-    // return NextResponse.json({
-    //   id: 1,
-    //   email: "ksrinivasrao531@gmail.com",
-    //   firstName: "K Srinivas",
-    //   lastName: "Rao",
-    //   imageUrl:
-    //     "https://lh3.googleusercontent.com/a/ACg8ocL2d1hFabIP6mlZ4pnCosMN8w6IfryKWQI9wxvic3YQgistRZVhfw=s96-c",
-    //   isEncryptionTokenGenerated: true,
-    //   encrytionKeyId: "pvi_ibdy44uu4xc5eywnd76z7u5oogw2vuos",
-    //   pangeaId: "pmt_u2bzfywp7q4g24x2xkqrpun6x32anzeq",
-    //   createdAt: "2024-04-25T14:45:30.289Z",
-    //   updatedAt: "2024-04-25T14:45:30.289Z",
-    // });
     const resp = await getUserProfileFromToken();
+    console.log("GET /api/me resp: ", resp);
     if ("id" in resp) {
       const user = await getUserProfileFromDb(resp.id);
       return NextResponse.json(user);
