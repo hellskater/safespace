@@ -1,9 +1,9 @@
 import { env } from "@/utils/env";
-import { neon } from "@neondatabase/serverless";
-import { drizzle } from "drizzle-orm/neon-http";
+import { Pool } from "@neondatabase/serverless";
+import { drizzle } from "drizzle-orm/neon-serverless";
 
-const sql = neon(env.NEON_DATABASE_URL!);
+const pool = new Pool({ connectionString: env.NEON_DATABASE_URL! });
 
-const db = drizzle(sql);
+const db = drizzle(pool);
 
 export default db;
