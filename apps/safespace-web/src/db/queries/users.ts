@@ -52,6 +52,13 @@ export const createUserInDb = async (data: AuthN.Client.Token.CheckResult) => {
 
 export const getUserProfileFromDb = async (pangeaId: string) => {
   try {
+    try {
+      const allUsers = await db.select().from(users);
+      console.log({ allUsers });
+    } catch (error) {
+      console.log("getAllUsers error: ", error);
+    }
+
     const data = await db
       .select({
         id: users.id,
@@ -67,8 +74,6 @@ export const getUserProfileFromDb = async (pangeaId: string) => {
       })
       .from(users)
       .where(eq(users.pangeaId, pangeaId));
-
-    console.log({ data, pangeaId, db });
 
     if (data.length > 0) {
       return data[0];
