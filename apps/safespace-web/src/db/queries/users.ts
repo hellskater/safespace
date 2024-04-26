@@ -68,6 +68,8 @@ export const getUserProfileFromDb = async (pangeaId: string) => {
       .from(users)
       .where(eq(users.pangeaId, pangeaId));
 
+    console.log({ data, pangeaId, db });
+
     if (data.length > 0) {
       return data[0];
     }

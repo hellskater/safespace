@@ -12,13 +12,10 @@ import { z } from "zod";
 export const GET = async ({}: Request) => {
   try {
     const resp = await getUserProfileFromToken();
-    console.log("GET /api/me resp: ", resp);
     if ("id" in resp) {
       const user = await getUserProfileFromDb(resp.id);
-      console.log("GET /api/me user: ", user);
       return NextResponse.json(user);
     }
-    console.log("at the end of GET /api/me")
     return resp;
   } catch (error) {
     console.error("GET /api/me error: ", error);
