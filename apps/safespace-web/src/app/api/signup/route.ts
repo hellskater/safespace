@@ -84,7 +84,7 @@ export const POST = async (req: Request) => {
           isEncryptionTokenGenerated: true,
           encryptionKeyId: storeResponse.id,
         })
-        .where(eq(users.pangeaId, resp.identity))
+        .where(eq(users.pangeaId, resp.identity)) 
         .returning();
 
       return NextResponse.json(newUser);

@@ -1,7 +1,7 @@
 import { getUserProfileFromDb } from "@/db/queries/users";
 import { getUserProfileFromToken } from "@/lib/api/auth-helpers";
 import { getVaultService } from "@/lib/pangea";
-import { MyKeyType } from "@/types/key";
+import { type MyKeyType } from "@/types/key";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { NextResponse } from "next/server";
 

@@ -2,9 +2,9 @@ import axiosClient from "@/lib/axiosInstance";
 import { QUERY_KEYS, URLS } from "./query-utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getAuthCookie } from "@/utils/cookies";
-import { UserType } from "@/db/dto/user.dto";
-import toast from "react-hot-toast";
-import { MyKeyType } from "@/types/key";
+import { type UserType } from "@/db/dto/user.dto";
+import { type MyKeyType } from "@/types/key";
+import { toast } from "sonner";
 
 // ------------------------------ GET me ------------------------------
 

@@ -2,7 +2,7 @@
 
 import useCheckSessionTimeout from "@/lib/hooks/auth/useCheckSessionTimeout";
 import useSyncLocalProfileWithRemote from "@/lib/hooks/auth/useSyncLocalProfileWithRemote";
-import { ReactNode } from "react";
+import { type ReactNode } from "react";
 
 const ProvidersDependentHoc = ({ children }: { children: ReactNode }) => {
   useSyncLocalProfileWithRemote();

@@ -1,5 +1,5 @@
 import { animateTextChange } from "@/utils/encryption";
-import { AnimationControls, motion } from "framer-motion";
+import { type AnimationControls, motion } from "framer-motion";
 import React, { useEffect, useMemo, useState } from "react";
 
 export const OPACITY_DURATION = 0.06;

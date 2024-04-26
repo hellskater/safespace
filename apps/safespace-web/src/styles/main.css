@@ -12,6 +12,7 @@
 @import "./background.css";
 @import "./gradient-text.css";
 @import "./flat-breaks.css";
+@import "./prosemirror.css";
 
 @tailwind base;
 @tailwind components;

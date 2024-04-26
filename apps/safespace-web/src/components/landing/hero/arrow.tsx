@@ -1,4 +1,4 @@
-import { AnimationControls, motion } from "framer-motion";
+import { type AnimationControls, motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import { useWindowSize } from "usehooks-ts";
 

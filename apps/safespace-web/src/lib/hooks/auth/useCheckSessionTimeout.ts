@@ -2,7 +2,7 @@ import { getAuthCookie } from "@/utils/cookies";
 import { useAuth } from "@pangeacyber/react-auth";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 
 const useCheckSessionTimeout = () => {
   const { logout } = useAuth();

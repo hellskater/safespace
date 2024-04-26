@@ -6,8 +6,8 @@ import Link from "next/link";
 import React from "react";
 import { LogOut, LogIn } from "lucide-react";
 import { useRouter } from "next/navigation";
-import toast from "react-hot-toast";
 import Cookies from "js-cookie";
+import { toast } from "sonner";
 
 const Header = () => {
   const { authenticated, login, logout } = useAuth();
