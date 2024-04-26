@@ -30,7 +30,7 @@ export const checkIfUserExistsInDb = async (pangeaId: string) => {
 
 export const createUserInDb = async (data: AuthN.Client.Token.CheckResult) => {
   try {
-    const { email, id, profile } = data;
+    const { email, profile, identity } = data;
 
     const resp = await db
       .insert(users)
@@ -39,7 +39,7 @@ export const createUserInDb = async (data: AuthN.Client.Token.CheckResult) => {
         imageUrl: profile?.image_url,
         firstName: profile?.first_name,
         lastName: profile?.last_name,
-        pangeaId: id,
+        pangeaId: identity,
         isEncryptionTokenGenerated: false,
       })
       .returning();
@@ -52,13 +52,6 @@ export const createUserInDb = async (data: AuthN.Client.Token.CheckResult) => {
 
 export const getUserProfileFromDb = async (pangeaId: string) => {
   try {
-    try {
-      const allUsers = await db.select().from(users);
-      console.log({ allUsers });
-    } catch (error) {
-      console.log("getAllUsers error: ", error);
-    }
-
     const data = await db
       .select({
         id: users.id,

@@ -10,7 +10,7 @@ export const GET = async ({}: Request) => {
   try {
     const resp = await getUserProfileFromToken();
     if ("id" in resp) {
-      const user = await getUserProfileFromDb(resp.id);
+      const user = await getUserProfileFromDb(resp.identity);
       const vaultService = getVaultService();
 
       if (!user?.encrytionKeyId) {

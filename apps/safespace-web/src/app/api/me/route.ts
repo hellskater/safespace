@@ -13,7 +13,7 @@ export const GET = async ({}: Request) => {
   try {
     const resp = await getUserProfileFromToken();
     if ("id" in resp) {
-      const user = await getUserProfileFromDb(resp.id);
+      const user = await getUserProfileFromDb(resp.identity);
       return NextResponse.json(user);
     }
     return resp;
@@ -47,7 +47,7 @@ export const PATCH = async (req: Request) => {
     }
 
     // safespace db user
-    const userProf = await getUserProfileFromDb(resp.id);
+    const userProf = await getUserProfileFromDb(resp.identity);
 
     if (!userProf) {
       return new Response(JSON.stringify({ error: ReasonPhrases.NOT_FOUND }), {
@@ -93,9 +93,6 @@ export const PATCH = async (req: Request) => {
           },
         );
       }
-
-      // at this point we don't need to update db, since the id is the same, return userProf
-      return NextResponse.json(userProf);
     }
 
     delete userData.encryptionKey;
@@ -103,7 +100,7 @@ export const PATCH = async (req: Request) => {
     const updateResp = await db
       .update(users)
       .set(userData)
-      .where(eq(users.pangeaId, resp.id));
+      .where(eq(users.pangeaId, resp.identity));
 
     return NextResponse.json(updateResp);
   } catch (error) {

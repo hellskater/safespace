@@ -34,14 +34,14 @@ export const POST = async (req: Request) => {
     }
 
     // safespace db user check
-    const dbResp = await checkIfUserExistsInDb(resp.id);
+    const dbResp = await checkIfUserExistsInDb(resp.identity);
 
     if (dbResp?.userAlreadyExists) {
       // if the encryption token is not generated, then generate it here too
 
       if (!dbResp.isEncryptionTokenGenerated) {
         const storeResponse = await storeEncryptionSecret({
-          name: resp.id,
+          name: resp.identity,
           key: encryptionKey,
         });
 
@@ -53,7 +53,7 @@ export const POST = async (req: Request) => {
               isEncryptionTokenGenerated: true,
               encryptionKeyId: storeResponse.id,
             })
-            .where(eq(users.pangeaId, resp.id));
+            .where(eq(users.pangeaId, resp.identity));
         }
       }
 
@@ -72,7 +72,7 @@ export const POST = async (req: Request) => {
 
     // store the encryption key in the vault
     const storeResponse = await storeEncryptionSecret({
-      name: resp.id,
+      name: resp.identity,
       key: encryptionKey,
     });
 
@@ -84,7 +84,7 @@ export const POST = async (req: Request) => {
           isEncryptionTokenGenerated: true,
           encryptionKeyId: storeResponse.id,
         })
-        .where(eq(users.pangeaId, resp.id))
+        .where(eq(users.pangeaId, resp.identity))
         .returning();
 
       return NextResponse.json(newUser);
