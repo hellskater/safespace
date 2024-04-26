@@ -8,6 +8,8 @@ import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
+export const runtime = "edge";
+
 // GET /api/me –get the user's profile
 export const GET = async ({}: Request) => {
   try {
