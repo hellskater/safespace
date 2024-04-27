@@ -2,6 +2,7 @@ import OpenAI from "openai";
 import { OpenAIStream, StreamingTextResponse } from "ai";
 import { match } from "ts-pattern";
 import type { ChatCompletionMessageParam } from "openai/resources/index.mjs";
+import { getRedactService } from "@/lib/pangea";
 
 // Create an OpenAI API client (that's edge friendly!)
 // Using LLamma's OpenAI client:
@@ -25,6 +26,11 @@ export async function POST(req: Request): Promise<Response> {
   }
 
   let { prompt, option, command } = await req.json();
+
+  const redactService = getRedactService();
+  const redactedResult = await redactService.redact(prompt);
+  const redactedPrompt = redactedResult.result.redacted_text || prompt;
+
   const messages = match(option)
     .with("continue", () => [
       {
@@ -37,7 +43,7 @@ export async function POST(req: Request): Promise<Response> {
       },
       {
         role: "user",
-        content: prompt,
+        content: redactedPrompt,
       },
     ])
     .with("improve", () => [
@@ -50,7 +56,7 @@ export async function POST(req: Request): Promise<Response> {
       },
       {
         role: "user",
-        content: `The existing text is: ${prompt}`,
+        content: `The existing text is: ${redactedPrompt}`,
       },
     ])
     .with("shorter", () => [
@@ -62,7 +68,7 @@ export async function POST(req: Request): Promise<Response> {
       },
       {
         role: "user",
-        content: `The existing text is: ${prompt}`,
+        content: `The existing text is: ${redactedPrompt}`,
       },
     ])
     .with("longer", () => [
@@ -74,7 +80,7 @@ export async function POST(req: Request): Promise<Response> {
       },
       {
         role: "user",
-        content: `The existing text is: ${prompt}`,
+        content: `The existing text is: ${redactedPrompt}`,
       },
     ])
     .with("fix", () => [
@@ -87,7 +93,7 @@ export async function POST(req: Request): Promise<Response> {
       },
       {
         role: "user",
-        content: `The existing text is: ${prompt}`,
+        content: `The existing text is: ${redactedPrompt}`,
       },
     ])
     .with("zap", () => [
@@ -100,7 +106,7 @@ export async function POST(req: Request): Promise<Response> {
       },
       {
         role: "user",
-        content: `For this text: ${prompt}. You have to respect the command: ${command}`,
+        content: `For this text: ${redactedPrompt}. You have to respect the command: ${command}`,
       },
     ])
     .run() as ChatCompletionMessageParam[];

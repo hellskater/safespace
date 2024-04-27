@@ -1,12 +1,13 @@
 "use client";
 
 import { cn } from "@ui/lib/utils";
-import { Home, Settings } from "lucide-react";
+import { Home, KeyRound, Settings } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 
 const items = [
   { title: "home", Icon: Home, path: "/app" },
   { title: "settings", Icon: Settings, path: "/app/settings" },
+  { title: "key", Icon: KeyRound, path: "/app/key" },
 ];
 const Sidebar = () => {
   const pathname = usePathname();

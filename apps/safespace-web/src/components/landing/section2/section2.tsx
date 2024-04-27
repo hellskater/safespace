@@ -4,6 +4,7 @@ import {
   Key,
   KeyRound,
   PencilRuler,
+  ShieldAlert,
   ShieldCheck,
 } from "lucide-react";
 
@@ -30,8 +31,13 @@ const items = [
   },
   {
     icon: <KeyRound className="w-8 h-8" />,
-    text: "Your key is rotated every few days to ensure your notes are always secure.",
+    text: "You can rotate your key anytime you want, and all your notes will be re-encrypted with the new key.",
     gradient: "from-pink-500 to-red-400",
+  },
+  {
+    icon: <ShieldAlert className="w-8 h-8" />,
+    text: "Never worry about data breaches or unauthorized access to your notes.",
+    gradient: "from-red-400 to-yellow-300",
   },
 ];
 

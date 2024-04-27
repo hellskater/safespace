@@ -31,9 +31,9 @@ const Section1 = () => {
             animateTextChange(setText, originalText, true);
           }}
           ref={ref}
-          className="relative"
+          className="relative w-full"
         >
-          <h2 className="heading-2xl md:heading-6xl flat-none lg:flat-breaks">
+          <h2 className="heading-2xl md:heading-6xl flat-none lg:flat-breaks absolute w-full">
             {text}
           </h2>
         </div>
@@ -41,7 +41,7 @@ const Section1 = () => {
         <img
           src="https://nordvpn.com/wp-content/uploads/blog-featured-end-to-end-encryption-945x495-1.svg"
           alt="encryption gif"
-          className="w-full h-full mt-32 object-cover"
+          className="w-full h-full mt-72 object-cover"
         />
 
         <h2 className="heading-2xl md:heading-6xl flat-none mt-32 lg:flat-breaks with-orange-gradient-text">

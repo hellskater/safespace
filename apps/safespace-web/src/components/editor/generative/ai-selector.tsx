@@ -38,7 +38,6 @@ export function AISelector({ onOpenChange }: AISelectorProps) {
       }
     },
     onError: (e) => {
-      console.log("HEOJKHNKJ");
       toast.error(e.message);
     },
   });

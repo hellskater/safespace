@@ -6,6 +6,7 @@ import {
   UserIntelService,
   AuthNService,
   VaultService,
+  RedactService,
 } from "pangea-node-sdk";
 
 let domainIntelService: InstanceType<typeof DomainIntelService> | null = null;
@@ -13,6 +14,7 @@ let urlIntelService: InstanceType<typeof URLIntelService> | null = null;
 let userIntelService: InstanceType<typeof UserIntelService> | null = null;
 let authNService: InstanceType<typeof AuthNService> | null = null;
 let vaultService: InstanceType<typeof VaultService> | null = null;
+let redactService: InstanceType<typeof RedactService> | null = null;
 
 const getPangeaConfig = (): InstanceType<typeof PangeaConfig> => {
   return new PangeaConfig({
@@ -80,4 +82,15 @@ export function getVaultService(): InstanceType<typeof VaultService> {
   }
 
   return vaultService;
+}
+
+export function getRedactService(): InstanceType<typeof RedactService> {
+  if (!redactService) {
+    const token = env.PANGEA_TOKEN as string;
+
+    const config = getPangeaConfig();
+
+    redactService = new RedactService(token, config);
+  }
+  return redactService;
 }

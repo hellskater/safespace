@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useAuth } from "@pangeacyber/react-auth";
@@ -55,11 +56,16 @@ const Header = () => {
                 <LogOut className="w-4 h-4" />
                 <p>Logout</p>
               </Button>
-              <img
-                src={userProfile?.imageUrl}
-                alt="user profile"
-                className="h-10 w-10 rounded-full object-cover"
-              />
+              <Link href="/app">
+                <img
+                  src={userProfile?.imageUrl ?? "/images/robot.png"}
+                  onError={(e) => {
+                    e.currentTarget.src = "/images/robot.png";
+                  }}
+                  alt="user profile"
+                  className="h-10 w-10 rounded-full object-cover"
+                />
+              </Link>
             </section>
           ) : (
             <Button

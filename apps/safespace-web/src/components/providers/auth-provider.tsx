@@ -81,14 +81,14 @@ const PangeaAuthProvider = ({ children }: { children: React.ReactNode }) => {
       useStrictStateCheck={false}
       onLogin={handleLogin}
     >
-    <ReactQueryProvider queryClient={queryClient}>
-      <ProvidersDependentHoc>
-        <>
-          {children}
-          <Toaster />
-        </>
-      </ProvidersDependentHoc>
-    </ReactQueryProvider>
+      <ReactQueryProvider queryClient={queryClient}>
+        <ProvidersDependentHoc>
+          <>
+            {children}
+            <Toaster />
+          </>
+        </ProvidersDependentHoc>
+      </ReactQueryProvider>
     </AuthProvider>
   );
 };
