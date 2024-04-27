@@ -117,6 +117,9 @@ importers:
       '@tanstack/react-query-devtools':
         specifier: ^5.32.0
         version: 5.32.0(@tanstack/react-query@5.32.0)(react@18.2.0)
+      '@tiptap/react':
+        specifier: ^2.3.0
+        version: 2.3.0(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)(react-dom@18.2.0)(react@18.2.0)
       ai:
         specifier: ^3.0.33
         version: 3.0.33(react@18.2.0)(solid-js@1.8.17)(svelte@4.0.1)(vue@3.3.4)(zod@3.23.4)

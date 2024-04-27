@@ -10,6 +10,7 @@ import {
   EditorRoot,
   type JSONContent,
 } from "novel";
+
 import { useState } from "react";
 import { defaultExtensions } from "./extensions";
 import { NodeSelector } from "./selectors/node-selector";
@@ -30,16 +31,20 @@ type NovelEditorProps = {
     (editor: EditorInstance) => Promise<void>
   >;
   initialContent: JSONContent | null;
+  shouldRenderNull: boolean;
 };
 
 const NovelEditor = ({
   debouncedContentUpdates,
   initialContent,
+  shouldRenderNull,
 }: NovelEditorProps) => {
   const [openNode, setOpenNode] = useState(false);
   const [openColor, setOpenColor] = useState(false);
   const [openLink, setOpenLink] = useState(false);
   const [openAI, setOpenAI] = useState(false);
+
+  if (shouldRenderNull) null;
 
   if (!initialContent) {
     return (

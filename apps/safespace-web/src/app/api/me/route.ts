@@ -19,7 +19,7 @@ export const GET = async ({}: Request) => {
     //   imageUrl:
     //     "https://lh3.googleusercontent.com/a/ACg8ocL2d1hFabIP6mlZ4pnCosMN8w6IfryKWQI9wxvic3YQgistRZVhfw=s96-c",
     //   isEncryptionTokenGenerated: true,
-    //   encrytionKeyId: "pvi_5u7zwbmgcr7pjgfh7vfcdeoant3wzlo2",
+    //   encryptionKeyId: "pvi_5u7zwbmgcr7pjgfh7vfcdeoant3wzlo2",
     //   pangeaId: "pui_zaeifjj2glbm7beggwrpicmsk22t43sk",
     //   createdAt: "2024-04-26T02:57:34.258Z",
     //   updatedAt: "2024-04-26T02:57:34.258Z",

@@ -23,10 +23,12 @@ import type { EditorInstance, JSONContent } from "novel";
 import { useEffect, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import { HiOutlineLockOpen, HiOutlineLockClosed } from "react-icons/hi";
+import { flushSync } from "react-dom";
 
 const App = () => {
   // Local states
   const [isLocked, setIsLocked] = useState(false);
+  const [isNoteChanged, setIsNoteChanged] = useState(false);
   const [selectedNote, setSelectedNote] = useState<number | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [editingNote, setEditingNote] = useState<{
@@ -41,7 +43,7 @@ const App = () => {
     useCreateNewNoteMutation({
       setSelectedNote,
     });
-  const { mutate: deleteNote, isPending: isDeletingNote } =
+  const { mutateAsync: deleteNote, isPending: isDeletingNote } =
     useDeleteNoteMutation(selectedNote as number);
 
   // API calls queries
@@ -112,7 +114,14 @@ const App = () => {
 
   const handleNoteSelect = (noteId: number) => {
     setIsLocked(false);
+    setSelectedNote(null);
+
+    flushSync(() => {
+      setIsNoteChanged(true);
+    });
+
     setSelectedNote(noteId);
+    setIsNoteChanged(false);
   };
 
   const handleCreateNewNote = () => {
@@ -138,10 +147,8 @@ const App = () => {
 
   const handleDelete = async () => {
     setIsDeleteModalOpen(false);
-    deleteNote();
-    setTimeout(() => {
-      setSelectedNote(null);
-    }, 100);
+    await deleteNote();
+    setSelectedNote(null);
   };
 
   const isSaving = isNoteUpdating || isCreatingNote;
@@ -247,6 +254,7 @@ const App = () => {
         </div>
         <section className="p-5">
           <NovelEditor
+            shouldRenderNull={isNoteChanged}
             initialContent={(targetNote?.content as JSONContent) ?? null}
             debouncedContentUpdates={debouncedContentUpdates}
           />

@@ -19,6 +19,7 @@
     "@repo/ui": "workspace:*",
     "@tanstack/react-query": "^5.32.0",
     "@tanstack/react-query-devtools": "^5.32.0",
+    "@tiptap/react": "^2.3.0",
     "ai": "^3.0.33",
     "axios": "^1.6.8",
     "class-variance-authority": "^0.7.0",
