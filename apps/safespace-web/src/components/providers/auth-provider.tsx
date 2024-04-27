@@ -67,29 +67,29 @@ const PangeaAuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    // <AuthProvider
-    //   config={{
-    //     domain: env.NEXT_PUBLIC_PANGEA_DOMAIN as string,
-    //     clientToken: env.NEXT_PUBLIC_PANGEA_CLIENT_TOKEN as string,
-    //     useJwt: false,
-    //   }}
-    //   cookieOptions={{
-    //     useCookie: true,
-    //     cookieName: "pangea_auth",
-    //   }}
-    //   loginUrl={env.NEXT_PUBLIC_PANGEA_LOGIN_URL as string}
-    //   useStrictStateCheck={false}
-    //   onLogin={handleLogin}
-    // >
-    <ReactQueryProvider queryClient={queryClient}>
-      <ProvidersDependentHoc>
-        <>
-          {children}
-          <Toaster />
-        </>
-      </ProvidersDependentHoc>
-    </ReactQueryProvider>
-    // </AuthProvider>
+    <AuthProvider
+      config={{
+        domain: env.NEXT_PUBLIC_PANGEA_DOMAIN as string,
+        clientToken: env.NEXT_PUBLIC_PANGEA_CLIENT_TOKEN as string,
+        useJwt: false,
+      }}
+      cookieOptions={{
+        useCookie: true,
+        cookieName: "pangea_auth",
+      }}
+      loginUrl={env.NEXT_PUBLIC_PANGEA_LOGIN_URL as string}
+      useStrictStateCheck={false}
+      onLogin={handleLogin}
+    >
+      <ReactQueryProvider queryClient={queryClient}>
+        <ProvidersDependentHoc>
+          <>
+            {children}
+            <Toaster />
+          </>
+        </ProvidersDependentHoc>
+      </ReactQueryProvider>
+    </AuthProvider>
   );
 };
 

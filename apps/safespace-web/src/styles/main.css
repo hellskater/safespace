@@ -13,6 +13,7 @@
 @import "./gradient-text.css";
 @import "./flat-breaks.css";
 @import "./prosemirror.css";
+@import "./scrollbar.css";
 
 @tailwind base;
 @tailwind components;

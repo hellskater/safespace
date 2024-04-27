@@ -20,7 +20,12 @@
     "tailwindcss-safe-area": "^0.5.1",
     "typescript": "^5.3.3"
   },
+  "overrides": {
+    "@radix-ui/react-dismissable-layer": "^1.0.5",
+    "@radix-ui/react-focus-scope": "^1.0.4"
+  },
   "dependencies": {
+    "@radix-ui/react-alert-dialog": "^1.0.5",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-popover": "^1.0.7",
     "@radix-ui/react-scroll-area": "^1.0.5",

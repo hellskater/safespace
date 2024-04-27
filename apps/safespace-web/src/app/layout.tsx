@@ -23,13 +23,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={cn(poppins.className, "max-w-[85rem] mx-auto relative")}>
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={cn(
+          poppins.className,
+          "relative h-screen overflow-hidden",
+        )}
+      >
         <PangeaAuthProvider>
           <>
             <Header />
             {children}
-            <Footer />
+            {/* <Footer /> */}
           </>
         </PangeaAuthProvider>
       </body>

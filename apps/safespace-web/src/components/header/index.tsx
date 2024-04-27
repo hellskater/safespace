@@ -5,14 +5,21 @@ import { Button } from "@ui/components/ui/button";
 import Link from "next/link";
 import React from "react";
 import { LogOut, LogIn } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { toast } from "sonner";
+import { cn } from "@ui/lib/utils";
+import { useUserProfileQuery } from "@/lib/hooks/api/useProfileQueries";
 
 const Header = () => {
   const { authenticated, login, logout } = useAuth();
 
+  const { data: userProfile } = useUserProfileQuery();
+
   const router = useRouter();
+  const pathname = usePathname();
+
+  const shouldShowBorder = pathname !== "/";
 
   const handleLogout = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -26,12 +33,12 @@ const Header = () => {
   };
 
   return (
-    <header className="safe-paddings absolute inset-x-0 top-0 z-50 p-5">
-      {/* {authenticated ? (
-        <Button onClick={handleLogout}>Logout</Button>
-      ) : (
-        <Button onClick={login}>Login</Button>
-      )} */}
+    <header
+      className={cn(
+        "safe-paddings absolute inset-x-0 top-0 z-50 p-5",
+        shouldShowBorder && "pb-2 border-b",
+      )}
+    >
       <div className="flex max-w-full items-center justify-between p-4">
         <Link className="bg-stone-700 px-6 py-2" href="/">
           <span className="sr-only">SafeSpace Logo</span>
@@ -40,10 +47,20 @@ const Header = () => {
 
         <div>
           {authenticated ? (
-            <Button className="flex items-center gap-2" onClick={handleLogout}>
-              <LogOut className="w-4 h-4" />
-              <p>Logout</p>
-            </Button>
+            <section className="flex items-center gap-5">
+              <Button
+                className="flex items-center gap-2"
+                onClick={handleLogout}
+              >
+                <LogOut className="w-4 h-4" />
+                <p>Logout</p>
+              </Button>
+              <img
+                src={userProfile?.imageUrl}
+                alt="user profile"
+                className="h-10 w-10 rounded-full object-cover"
+              />
+            </section>
           ) : (
             <Button
               className="flex items-center gap-2"

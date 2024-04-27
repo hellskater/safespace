@@ -13,11 +13,6 @@ export interface BubbleColorMenuItem {
   color: string;
 }
 
-interface ColorSelectorProps {
-  isOpen: boolean;
-  setIsOpen: Dispatch<SetStateAction<boolean>>;
-}
-
 const TEXT_COLORS: BubbleColorMenuItem[] = [
   {
     name: "Default",
@@ -98,10 +93,10 @@ const HIGHLIGHT_COLORS: BubbleColorMenuItem[] = [
 
 interface ColorSelectorProps {
   open: boolean;
-  onOpenChange: (open: boolean) => void;
+  onOpenChange: Dispatch<SetStateAction<boolean>>;
 }
 
-export const ColorSelector = ({ open, onOpenChange }) => {
+export const ColorSelector = ({ open, onOpenChange }: ColorSelectorProps) => {
   const { editor } = useEditor();
 
   if (!editor) return null;
@@ -114,7 +109,7 @@ export const ColorSelector = ({ open, onOpenChange }) => {
   );
 
   return (
-    <Popover modal={true} open={open} onOpenChange={onOpenChange}>
+    <Popover open={open} onOpenChange={onOpenChange}>
       <PopoverTrigger asChild>
         <Button size="sm" className="gap-2 rounded-none" variant="ghost">
           <span

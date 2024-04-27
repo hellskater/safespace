@@ -53,3 +53,27 @@ export const generateSymmetricKey = () => {
   // AES requires a key that can be 128, 192, or 256 bits long; here we use 256 bits.
   return CryptoJS.lib.WordArray.random(256 / 8).toString(CryptoJS.enc.Hex);
 };
+
+// Function to encrypt JSON data
+export const encryptJson = (jsonData: Record<string, unknown>, key: string) => {
+  const dataString = JSON.stringify(jsonData);
+  const encrypted = CryptoJS.AES.encrypt(dataString, key);
+  return encrypted.toString();
+};
+
+export const encryptString = (data: string, key: string) => {
+  const encrypted = CryptoJS.AES.encrypt(data, key);
+  return encrypted.toString();
+};
+
+// Function to decrypt data
+export const decryptJson = (encryptedData: string, key: string) => {
+  const decrypted = CryptoJS.AES.decrypt(encryptedData, key);
+  const decryptedString = decrypted.toString(CryptoJS.enc.Utf8);
+  return JSON.parse(decryptedString);
+};
+
+export const decryptString = (encryptedData: string, key: string) => {
+  const decrypted = CryptoJS.AES.decrypt(encryptedData, key);
+  return decrypted.toString(CryptoJS.enc.Utf8);
+};

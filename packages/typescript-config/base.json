@@ -15,6 +15,7 @@
     "declarationMap": true,
     "verbatimModuleSyntax": true,
     "moduleDetection": "force",
+    "strictNullChecks": true,
 
     "downlevelIteration": true,
     "allowJs": true,
@@ -24,6 +25,9 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "incremental": true,
-    "tsBuildInfoFile": ".tsbuildinfo"
+    "tsBuildInfoFile": ".tsbuildinfo",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
   }
 }

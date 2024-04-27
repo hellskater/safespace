@@ -5,18 +5,18 @@ import { eq } from "drizzle-orm";
 
 export const checkIfUserExistsInDb = async (pangeaId: string) => {
   try {
-    const data = await db
-      .select({
-        id: users.id,
-        isEncryptionTokenGenerated: users.isEncryptionTokenGenerated,
-      })
-      .from(users)
-      .where(eq(users.pangeaId, pangeaId));
+    const data = await db.query.users.findFirst({
+      columns: {
+        id: true,
+        isEncryptionTokenGenerated: true,
+      },
+      where: eq(users.pangeaId, pangeaId),
+    });
 
-    if (data.length > 0) {
+    if (data && Object.keys(data).length > 0) {
       return {
         userAlreadyExists: true,
-        isEncryptionTokenGenerated: data[0]?.isEncryptionTokenGenerated,
+        isEncryptionTokenGenerated: data.isEncryptionTokenGenerated,
       };
     }
 
@@ -52,24 +52,12 @@ export const createUserInDb = async (data: AuthN.Client.Token.CheckResult) => {
 
 export const getUserProfileFromDb = async (pangeaId: string) => {
   try {
-    const data = await db
-      .select({
-        id: users.id,
-        email: users.email,
-        firstName: users.firstName,
-        lastName: users.lastName,
-        imageUrl: users.imageUrl,
-        isEncryptionTokenGenerated: users.isEncryptionTokenGenerated,
-        encrytionKeyId: users.encryptionKeyId,
-        pangeaId: users.pangeaId,
-        createdAt: users.createdAt,
-        updatedAt: users.updatedAt,
-      })
-      .from(users)
-      .where(eq(users.pangeaId, pangeaId));
+    const data = await db.query.users.findFirst({
+      where: eq(users.pangeaId, pangeaId),
+    });
 
-    if (data.length > 0) {
-      return data[0];
+    if (data && Object.keys(data).length > 0) {
+      return data;
     }
 
     return null;

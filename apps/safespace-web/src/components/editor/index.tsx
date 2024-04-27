@@ -8,62 +8,65 @@ import {
   EditorContent,
   EditorInstance,
   EditorRoot,
+  useEditor,
   type JSONContent,
 } from "novel";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { defaultExtensions } from "./extensions";
-import { useDebouncedCallback } from "use-debounce";
 import { NodeSelector } from "./selectors/node-selector";
 import { LinkSelector } from "./selectors/link-selector";
 import { ColorSelector } from "./selectors/color-selector";
 import { TextButtons } from "./selectors/text-buttons";
 import { handleCommandNavigation, ImageResizer } from "novel/extensions";
-import { handleImagePaste, handleImageDrop } from "novel/plugins";
 import GenerativeMenuSwitch from "./generative/generative-menu-switch";
 import { suggestionItems } from "./slash-command";
 import { Separator } from "@ui/components/ui/separator";
+import type { DebouncedState } from "usehooks-ts";
+import { Notebook } from "lucide-react";
 
 const extensions = [...defaultExtensions];
 
-const NovelEditor = () => {
-  const [initialContent, setInitialContent] = useState<null | JSONContent>({});
-  const [saveStatus, setSaveStatus] = useState("Saved");
+type NovelEditorProps = {
+  debouncedContentUpdates: DebouncedState<
+    (editor: EditorInstance) => Promise<void>
+  >;
+  initialContent: JSONContent | null;
+};
 
+const NovelEditor = ({
+  debouncedContentUpdates,
+  initialContent,
+}: NovelEditorProps) => {
   const [openNode, setOpenNode] = useState(false);
   const [openColor, setOpenColor] = useState(false);
   const [openLink, setOpenLink] = useState(false);
   const [openAI, setOpenAI] = useState(false);
 
-  const debouncedUpdates = useDebouncedCallback(
-    async (editor: EditorInstance) => {
-      const json = editor.getJSON();
-
-      window.localStorage.setItem("novel-content", JSON.stringify(json));
-      setSaveStatus("Saved");
-    },
-    500,
-  );
+  if (!initialContent) {
+    return (
+      <div className="h-full flex flex-col justify-center items-center">
+        <Notebook className="w-60 h-60 text-yellow-100 mt-20" />
+        <h2 className="mt-10 text-gray-400">Select a note to start editing!</h2>
+      </div>
+    );
+  }
 
   return (
     <EditorRoot>
       <EditorContent
         initialContent={initialContent}
         extensions={extensions}
-        className="relative min-h-[500px] w-full max-w-screen-lg border-muted bg-background sm:mb-[calc(20vh)] sm:rounded-lg sm:border sm:shadow-lg"
+        className="relative min-h-screen w-full max-w-screen-lg"
         editorProps={{
           handleDOMEvents: {
             keydown: (_view, event) => handleCommandNavigation(event),
           },
-          // handlePaste: (view, event) => handleImagePaste(view, event, uploadFn),
-          // handleDrop: (view, event, _slice, moved) =>
-          //   handleImageDrop(view, event, moved, uploadFn),
           attributes: {
             class: `prose prose-lg dark:prose-invert prose-headings:font-title font-default focus:outline-none max-w-full`,
           },
         }}
         onUpdate={({ editor }) => {
-          debouncedUpdates(editor);
-          setSaveStatus("Unsaved");
+          debouncedContentUpdates(editor);
         }}
         slotAfter={<ImageResizer />}
       >
@@ -75,7 +78,9 @@ const NovelEditor = () => {
             {suggestionItems.map((item) => (
               <EditorCommandItem
                 value={item.title}
-                onCommand={(val) => item.command(val)}
+                onCommand={(val) => {
+                  if (item.command) item.command(val);
+                }}
                 className={`flex w-full items-center space-x-2 rounded-md px-2 py-1 text-left text-sm hover:bg-accent aria-selected:bg-accent `}
                 key={item.title}
               >

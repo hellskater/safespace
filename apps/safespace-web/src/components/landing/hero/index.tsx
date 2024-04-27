@@ -6,7 +6,9 @@ import drawBackground from "./draw-background";
 import { motion, useAnimation } from "framer-motion";
 import Title from "./title";
 import Arrow from "./arrow";
-import Link from "next/link";
+import { useAuth } from "@pangeacyber/react-auth";
+import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 const buttonGradientVariants = {
   initial: {
@@ -47,6 +49,8 @@ const Hero = () => {
   const [sectionRef, inView] = useInView({
     triggerOnce: true,
   });
+  const { login, authenticated } = useAuth();
+  const router = useRouter();
   const [width, height] = useSize(ref);
   const titleControls = useAnimation();
   const arrowLineControls = useAnimation();
@@ -121,9 +125,16 @@ const Hero = () => {
           variants={buttonVisibilityVariants}
           className="w-fit bg-white p-2.5 mt-14"
         >
-          <Link
-            className="relative inline-flex items-center bg-black text-white px-[60px] py-[26px] text-[22px] font-semibold leading-none transition-colors duration-200 lg:py-6 lg:px-16 lg:text-lg lg:leading-none md:py-4.5 md:px-12"
-            href="/login"
+          <div
+            className="relative cursor-pointer inline-flex items-center bg-black text-white px-[60px] py-[26px] text-[22px] font-semibold leading-none transition-colors duration-200 lg:py-6 lg:px-16 lg:text-lg lg:leading-none md:py-4.5 md:px-12"
+            onClick={() => {
+              if (authenticated) {
+                router.push("/app");
+              } else {
+                Cookies.set("initiatingLogin", "true");
+                login();
+              }
+            }}
           >
             <span>Try it Now</span>
             <motion.span
@@ -141,7 +152,7 @@ const Hero = () => {
               </span>
               <span className="absolute top-0 left-0 bottom-0 right-0 bg-black opacity-0 transition-opacity group-hover:opacity-100" />
             </motion.span>
-          </Link>
+          </div>
         </motion.div>
       </div>
     </section>

@@ -1,0 +1,14 @@
+@layer utilities {
+  .stylized-scroll::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .stylized-scroll::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .stylized-scroll::-webkit-scrollbar-thumb {
+    background-color: lightgray;
+    border-radius: 6px;
+  }
+}

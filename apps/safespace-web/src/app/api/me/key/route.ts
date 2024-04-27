@@ -13,11 +13,11 @@ export const GET = async ({}: Request) => {
       const user = await getUserProfileFromDb(resp.identity);
       const vaultService = getVaultService();
 
-      if (!user?.encrytionKeyId) {
+      if (!user?.encryptionKeyId) {
         return NextResponse.json(null);
       }
 
-      const vaultResponse = await vaultService.getItem(user.encrytionKeyId);
+      const vaultResponse = await vaultService.getItem(user.encryptionKeyId);
 
       if (!vaultResponse?.result?.current_version?.secret) {
         return new Response(
@@ -31,7 +31,7 @@ export const GET = async ({}: Request) => {
       const keyResp: MyKeyType = {
         currentVersion: vaultResponse?.result.current_version.version,
         value: vaultResponse?.result.current_version.secret,
-        id: user.encrytionKeyId,
+        id: user.encryptionKeyId,
         lastRotatedAt: vaultResponse?.result.last_rotated ?? null,
       };
 

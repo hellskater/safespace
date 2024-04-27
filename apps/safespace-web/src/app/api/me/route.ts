@@ -11,25 +11,25 @@ import { z } from "zod";
 // GET /api/me –get the user's profile
 export const GET = async ({}: Request) => {
   try {
-    return NextResponse.json({
-      id: 5,
-      email: "ksrinivasrao531@gmail.com",
-      firstName: "K Srinivas",
-      lastName: "Rao",
-      imageUrl:
-        "https://lh3.googleusercontent.com/a/ACg8ocL2d1hFabIP6mlZ4pnCosMN8w6IfryKWQI9wxvic3YQgistRZVhfw=s96-c",
-      isEncryptionTokenGenerated: true,
-      encrytionKeyId: "pvi_5u7zwbmgcr7pjgfh7vfcdeoant3wzlo2",
-      pangeaId: "pui_zaeifjj2glbm7beggwrpicmsk22t43sk",
-      createdAt: "2024-04-26T02:57:34.258Z",
-      updatedAt: "2024-04-26T02:57:34.258Z",
-    });
-    // const resp = await getUserProfileFromToken();
-    // if ("id" in resp) {
-    //   const user = await getUserProfileFromDb(resp.identity);
-    //   return NextResponse.json(user);
-    // }
-    // return resp;
+    // return NextResponse.json({
+    //   id: 5,
+    //   email: "ksrinivasrao531@gmail.com",
+    //   firstName: "K Srinivas",
+    //   lastName: "Rao",
+    //   imageUrl:
+    //     "https://lh3.googleusercontent.com/a/ACg8ocL2d1hFabIP6mlZ4pnCosMN8w6IfryKWQI9wxvic3YQgistRZVhfw=s96-c",
+    //   isEncryptionTokenGenerated: true,
+    //   encrytionKeyId: "pvi_5u7zwbmgcr7pjgfh7vfcdeoant3wzlo2",
+    //   pangeaId: "pui_zaeifjj2glbm7beggwrpicmsk22t43sk",
+    //   createdAt: "2024-04-26T02:57:34.258Z",
+    //   updatedAt: "2024-04-26T02:57:34.258Z",
+    // });
+    const resp = await getUserProfileFromToken();
+    if ("id" in resp) {
+      const user = await getUserProfileFromDb(resp.identity);
+      return NextResponse.json(user);
+    }
+    return resp;
   } catch (error) {
     console.error("GET /api/me error: ", error);
     return new Response(
@@ -84,7 +84,7 @@ export const PATCH = async (req: Request) => {
     const userData = payload.data;
 
     if (userData.encryptionKey) {
-      if (!userProf.encrytionKeyId) {
+      if (!userProf.encryptionKeyId) {
         return new Response(
           JSON.stringify({ error: ReasonPhrases.BAD_REQUEST }),
           {
@@ -94,7 +94,7 @@ export const PATCH = async (req: Request) => {
       }
 
       const rotateResp = await rotateEncryptionSecret({
-        id: userProf.encrytionKeyId,
+        id: userProf.encryptionKeyId,
         newKey: userData.encryptionKey,
       });
 

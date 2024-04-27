@@ -15,6 +15,7 @@ import AICompletionCommands from "./ai-completion-command";
 import { ArrowUp } from "lucide-react";
 import { addAIHighlight } from "novel/extensions";
 import { Button } from "@ui/components/ui/button";
+import type { Editor } from "@tiptap/core";
 //TODO: I think it makes more sense to create a custom Tiptap extension for this functionality https://tiptap.dev/docs/editor/ai/introduction
 
 interface AISelectorProps {
@@ -77,7 +78,7 @@ export function AISelector({ open, onOpenChange }: AISelectorProps) {
                   ? "Tell AI what to do next"
                   : "Ask AI to edit or generate..."
               }
-              onFocus={() => addAIHighlight(editor)}
+              onFocus={() => addAIHighlight(editor as Editor)}
             />
             <Button
               size="icon"
@@ -88,9 +89,9 @@ export function AISelector({ open, onOpenChange }: AISelectorProps) {
                     body: { option: "zap", command: inputValue },
                   }).then(() => setInputValue(""));
 
-                const slice = editor.state.selection.content();
-                const text = editor.storage.markdown.serializer.serialize(
-                  slice.content,
+                const slice = editor?.state.selection.content();
+                const text = editor?.storage.markdown.serializer.serialize(
+                  slice?.content,
                 );
 
                 complete(text, {
@@ -104,7 +105,7 @@ export function AISelector({ open, onOpenChange }: AISelectorProps) {
           {hasCompletion ? (
             <AICompletionCommands
               onDiscard={() => {
-                editor.chain().unsetHighlight().focus().run();
+                editor?.chain().unsetHighlight().focus().run();
                 onOpenChange(false);
               }}
               completion={completion}

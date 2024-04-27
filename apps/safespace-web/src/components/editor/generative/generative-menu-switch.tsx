@@ -5,6 +5,7 @@ import {} from "novel/plugins";
 import { removeAIHighlight } from "novel/extensions";
 import Magic from "@ui/components/icons/magic";
 import { Button } from "@ui/components/ui/button";
+import type { Editor } from "@tiptap/core";
 
 interface GenerativeMenuSwitchProps {
   children: ReactNode;
@@ -19,7 +20,7 @@ const GenerativeMenuSwitch = ({
   const { editor } = useEditor();
 
   useEffect(() => {
-    if (!open) removeAIHighlight(editor);
+    if (!open) removeAIHighlight(editor as Editor);
   }, [open]);
   return (
     <EditorBubble
@@ -27,7 +28,7 @@ const GenerativeMenuSwitch = ({
         placement: open ? "bottom-start" : "top",
         onHidden: () => {
           onOpenChange(false);
-          editor.chain().unsetHighlight().run();
+          editor?.chain().unsetHighlight().run();
         },
       }}
       className="flex w-fit max-w-[90vw] overflow-hidden rounded-md border border-muted bg-background shadow-xl"

@@ -1,0 +1,1 @@
+CREATE INDEX IF NOT EXISTS "owner_id_idx" ON "notes" ("owner_id");

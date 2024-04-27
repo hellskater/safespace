@@ -22,10 +22,14 @@ export const getUserProfile = async () => {
 
 export const useUserProfileQuery = () => {
   const token = getAuthCookie();
+  const userProfile = JSON.parse(
+    localStorage.getItem("safespace_user_profile") || "{}",
+  );
   return useQuery({
     queryKey: [QUERY_KEYS.PROFILE.GET_USER_PROFILE],
     queryFn: getUserProfile,
     enabled: !!token,
+    placeholderData: userProfile,
   });
 };
 
