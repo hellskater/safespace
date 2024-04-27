@@ -8,10 +8,9 @@ import {
   EditorContent,
   EditorInstance,
   EditorRoot,
-  useEditor,
   type JSONContent,
 } from "novel";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { defaultExtensions } from "./extensions";
 import { NodeSelector } from "./selectors/node-selector";
 import { LinkSelector } from "./selectors/link-selector";

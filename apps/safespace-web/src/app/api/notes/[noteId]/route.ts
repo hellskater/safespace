@@ -84,7 +84,7 @@ export const PATCH = async (
 
 // DELETE /api/notes – delete a note
 export const DELETE = async (
-  req: Request,
+  _: Request,
   {
     params: { noteId },
   }: {

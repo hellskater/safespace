@@ -5,7 +5,6 @@ import "../styles/main.css";
 import PangeaAuthProvider from "@/components/providers/auth-provider";
 import Header from "@/components/header";
 import { cn } from "@ui/lib/utils";
-import Footer from "@/components/footer/footer";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -25,10 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={cn(
-          poppins.className,
-          "relative h-screen overflow-hidden",
-        )}
+        className={cn(poppins.className, "relative h-screen overflow-hidden")}
       >
         <PangeaAuthProvider>
           <>

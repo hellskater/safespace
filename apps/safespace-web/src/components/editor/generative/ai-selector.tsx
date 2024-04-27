@@ -23,7 +23,7 @@ interface AISelectorProps {
   onOpenChange: (open: boolean) => void;
 }
 
-export function AISelector({ open, onOpenChange }: AISelectorProps) {
+export function AISelector({ onOpenChange }: AISelectorProps) {
   const { editor } = useEditor();
 
   const [inputValue, setInputValue] = useState("");
