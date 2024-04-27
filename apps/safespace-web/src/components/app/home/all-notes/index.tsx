@@ -34,8 +34,6 @@ const AllNotes = ({
   selectedNote,
   handleNoteSelect,
 }: AllNotesProps) => {
-  const [animateRef] = useAutoAnimate();
-
   const isMounted = useIsMounted();
 
   const { data: keyDetails, isLoading: isFetchingKey } = useGetUserKeyDetails();
@@ -94,7 +92,7 @@ const AllNotes = ({
   const finalData = formatData();
 
   return (
-    <div ref={animateRef} className="space-y-3">
+    <div className="space-y-3">
       {isMounted() &&
         match({ finalData, isNotesLoading, isFetchingKey })
           .with({ isNotesLoading: true }, { isFetchingKey: true }, () => {
@@ -128,19 +126,12 @@ const AllNotes = ({
                 <h2 className="text-lg text-gray-400 font-semibold">
                   {item.fromNow}
                 </h2>
-                <div className="space-y-2 mt-3">
-                  {item.data.map((note) => (
-                    <div
-                      onClick={() => handleNoteSelect(note.id)}
-                      key={note.title}
-                    >
-                      <NoteCard
-                        data={note}
-                        isActive={selectedNote === note.id}
-                      />
-                    </div>
-                  ))}
-                </div>
+
+                <NoteGroup
+                  data={item.data}
+                  selectedNote={selectedNote}
+                  handleNoteSelect={handleNoteSelect}
+                />
               </div>
             )),
           )}
@@ -149,3 +140,29 @@ const AllNotes = ({
 };
 
 export default AllNotes;
+
+const NoteGroup = ({
+  data,
+  selectedNote,
+  handleNoteSelect,
+}: {
+  data: NoteType[];
+  selectedNote: number | null;
+  handleNoteSelect: (noteId: number) => void;
+}) => {
+  const [animateRef] = useAutoAnimate();
+
+  return (
+    <div ref={animateRef} className="space-y-2 mt-3">
+      {data.map((note) => (
+        <div onClick={() => handleNoteSelect(note.id)} key={note.title}>
+          <NoteCard
+            key={note.id}
+            data={note}
+            isActive={selectedNote === note.id}
+          />
+        </div>
+      ))}
+    </div>
+  );
+};

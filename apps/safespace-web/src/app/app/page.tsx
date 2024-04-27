@@ -139,7 +139,9 @@ const App = () => {
   const handleDelete = async () => {
     setIsDeleteModalOpen(false);
     deleteNote();
-    setSelectedNote(null);
+    setTimeout(() => {
+      setSelectedNote(null);
+    }, 100);
   };
 
   const isSaving = isNoteUpdating || isCreatingNote;
