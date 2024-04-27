@@ -9,6 +9,7 @@ const server = z.object({
   PANGEA_DOMAIN: z.string().min(1),
   PANGEA_TOKEN: z.string().min(1),
   NEON_DATABASE_URL: z.string().min(1),
+  OPENAI_API_KEY: z.string().min(1),
 });
 
 const client = z.object({
@@ -24,6 +25,7 @@ const processEnv = {
   PANGEA_DOMAIN: process.env.PANGEA_DOMAIN,
   PANGEA_TOKEN: process.env.PANGEA_TOKEN,
   NEON_DATABASE_URL: process.env.NEON_DATABASE_URL,
+  OPENAI_API_KEY: process.env.OPENAI_API_KEY,
   NEXT_PUBLIC_PANGEA_DOMAIN: process.env.NEXT_PUBLIC_PANGEA_DOMAIN,
   NEXT_PUBLIC_PANGEA_CLIENT_TOKEN: process.env.NEXT_PUBLIC_PANGEA_CLIENT_TOKEN,
   NEXT_PUBLIC_PANGEA_LOGIN_URL: process.env.NEXT_PUBLIC_PANGEA_LOGIN_URL,

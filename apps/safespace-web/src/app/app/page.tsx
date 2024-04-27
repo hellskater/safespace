@@ -227,7 +227,9 @@ const App = () => {
                 });
               }}
               value={
-                editingNote.isEditing ? editingNote.value : targetNote?.title
+                editingNote.isEditing
+                  ? editingNote.value
+                  : targetNote?.title || ""
               }
               disabled={!selectedNote}
               onChange={(e) => {

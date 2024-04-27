@@ -20,7 +20,8 @@
         "NEXT_PUBLIC_PANGEA_CLIENT_TOKEN",
         "NEXT_PUBLIC_PANGEA_LOGIN_URL",
         "NEON_DATABASE_URL",
-        "NODE_ENV"
+        "NODE_ENV",
+        "OPENAI_API_KEY"
       ]
     }
   }
