@@ -254,7 +254,7 @@ const App = () => {
             </p>
           )}
         </div>
-        <section className="p-5">
+        <section className="p-5 h-screen overflow-y-auto stylized-scroll">
           <NovelEditor
             shouldRenderNull={isNoteChanged}
             initialContent={(targetNote?.content as JSONContent) ?? null}

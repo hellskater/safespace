@@ -1,6 +1,6 @@
 import {
   ICON_RELATIVE_PATH,
-  SecurityReport
+  type SecurityReport
 } from "@/lib/background/security-headers"
 import { cn } from "@repo/ui/lib/utils"
 import { useEffect, useState } from "react"
