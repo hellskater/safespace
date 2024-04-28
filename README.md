@@ -55,7 +55,15 @@ The SafeSpace webapp is a platform for secure note-taking which provides end-to-
 
 ## Development
 
-<!-- @repo/eslint-config - https://github.com/hellskater/safespace/tree/main/packages/eslint-config -->
+Local development is done using the following steps:
+
+1. Clone the repository.
+
+2. Install the dependencies using `pnpm install`.
+
+3. Start the development servers using `pnpm dev`.
+
+> **_NOTE:_**  Please visit the below links of extension and webapp for detailed steps on how to configure the environment before starting the servers.
 
 - [extension](https://github.com/hellskater/safespace/tree/main/apps/extension) - Browser extension for SafeSpace.
 
