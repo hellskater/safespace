@@ -33,3 +33,5 @@ The SafeSpace browser extension is a companion tool that provides users with a s
 - [User Intel](https://pangea.cloud/services/user-intel/) - Used to check if the password has been breached.
 
 ## SafeSpace Webapp
+
+![Screenshot 2024-04-28 at 4 31 03 PM](https://github.com/hellskater/safespace/assets/47584722/67b7ca8f-5647-4ad4-8d35-591473202476)
