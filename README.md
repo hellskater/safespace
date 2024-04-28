@@ -57,7 +57,7 @@ The SafeSpace webapp is a platform for secure note-taking which provides end-to-
 
 <!-- @repo/eslint-config - https://github.com/hellskater/safespace/tree/main/packages/eslint-config -->
 
-- [extension](https://github.com/hellskater/safespace/tree/main/apps/extensions) - Browser extension for SafeSpace.
+- [extension](https://github.com/hellskater/safespace/tree/main/apps/extension) - Browser extension for SafeSpace.
 
 - [webapp](https://github.com/hellskater/safespace/tree/main/apps/safespace-web) - Webapp for SafeSpace.
 
