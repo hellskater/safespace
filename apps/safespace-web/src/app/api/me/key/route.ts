@@ -8,12 +8,6 @@ import { NextResponse } from "next/server";
 // GET /api/me/key – get the user's key
 export const GET = async ({}: Request) => {
   try {
-    // return NextResponse.json({
-    //   currentVersion: 1,
-    //   value: "5001c7a80c2f1438d0174479616b07543f77e5845985f9fa1e6efa6c6116f8e4",
-    //   id: "pvi_5u7zwbmgcr7pjgfh7vfcdeoant3wzlo2",
-    //   lastRotatedAt: null,
-    // });
     const resp = await getUserProfileFromToken();
     if ("id" in resp) {
       const user = await getUserProfileFromDb(resp.identity);

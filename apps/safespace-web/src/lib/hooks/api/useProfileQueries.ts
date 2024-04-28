@@ -128,3 +128,44 @@ export const useUpdateUserProfileMutation = () => {
     },
   });
 };
+
+// ------------------------------ POST rotate key ------------------------------
+
+export type RotateKeyPayloadType = {
+  newKey: string;
+  notesData?: {
+    id: number;
+    title: string;
+    content: string;
+  }[];
+  oldKeyId: string;
+};
+
+export const rotateKey = async (payload: RotateKeyPayloadType) => {
+  const resp: {
+    data: UserType;
+  } = await axiosClient.post(URLS.rotateKey, payload);
+
+  return resp.data;
+};
+
+export const useRotateKeyMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: rotateKey,
+    onError: (error) => {
+      console.error("useRotateKeyMutation error: ", error);
+
+      toast.error("Failed to rotate encryption key");
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.PROFILE.GET_MY_KEY],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.NOTES.GET_ALL_NOTES],
+      });
+      toast.success("Encryption key rotated successfully");
+    },
+  });
+};

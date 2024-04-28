@@ -2,6 +2,7 @@ export const URLS = {
   getMe: "/me",
   putMe: "/me",
   getMyKey: "/me/key",
+  rotateKey: "/me/key/rotate",
   signup: "/signup",
 
   // notes
