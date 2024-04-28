@@ -54,7 +54,7 @@ export const initializeLinkCheckerContextMenu = () => {
             performFinalAction(finalResult, tabId)
           }
         } else {
-          fetch(`http://localhost:3000/api/analyze/url?q=${url}`)
+          fetch(`${process.env.PLASMO_PUBLIC_API_URL}/analyze/url?q=${url}`)
             .then((res) => {
               const result = res.json()
               return result

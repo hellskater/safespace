@@ -50,7 +50,9 @@ export const initializePasswordCheckerContextMenu = () => {
             performFinalAction(finalResult, tabId)
           }
         } else {
-          fetch(`http://localhost:3000/api/analyze/password?q=${password}`)
+          fetch(
+            `${process.env.PLASMO_PUBLIC_API_URL}/analyze/password?q=${password}`
+          )
             .then((res) => {
               const result = res.json()
               return result

@@ -12,8 +12,10 @@ import "@repo/ui/globals.css"
 import "../styles/index.css"
 
 import CustomTooltip from "@ui/components/custom/custom-tooltip"
+import { Button } from "@ui/components/ui/button"
 import {
   AlertTriangle,
+  BarChart4,
   InfoIcon,
   RefreshCcw,
   ShieldCheck,
@@ -112,7 +114,7 @@ function IndexPopup() {
       <section
         className={cn(
           themeColor,
-          "h-60 flex gap-5 flex-col justify-center items-center relative"
+          "h-[14rem] flex gap-5 flex-col justify-center items-center relative"
         )}>
         <p className="absolute top-5 left-5 px-4 py-1 text-xs rounded-full font-semibold text-white border">
           Security Level
@@ -132,7 +134,7 @@ function IndexPopup() {
 
       {data ? (
         <>
-          <section className="p-5 flex justify-between w-full">
+          <section className="p-4 flex justify-between w-full">
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="text-base text-blue-600 font-semibold tracking-wide">
@@ -143,7 +145,7 @@ function IndexPopup() {
                 </CustomTooltip>
               </div>
 
-              <div className="flex items-center gap-2 mt-3">
+              <div className="flex items-center gap-2 mt-2">
                 <p className="text-slate-600 text-sm">Score:</p>
                 <p
                   className={cn(
@@ -164,7 +166,7 @@ function IndexPopup() {
             </div>
           </section>
 
-          <section className="p-5 pt-0">
+          <section className="p-4 pt-0">
             <div className="flex items-center gap-2">
               <h3 className="text-base text-blue-600 font-semibold tracking-wide">
                 Security Headers
@@ -174,7 +176,7 @@ function IndexPopup() {
               </CustomTooltip>
             </div>
 
-            <div className="flex items-center gap-2 mt-3">
+            <div className="flex items-center gap-2 mt-2">
               <p className="text-slate-600 text-sm">Score:</p>
               <p
                 className={cn(
@@ -189,7 +191,7 @@ function IndexPopup() {
               </p>
             </div>
 
-            <div className="mt-5 flex items-center gap-3 flex-wrap">
+            <div className="mt-4 flex items-center gap-3 flex-wrap">
               {securityHeadersInfo &&
                 Object.entries(securityHeadersInfo).map(([header, report]) => (
                   <SecurityHeaderCard
@@ -200,6 +202,18 @@ function IndexPopup() {
                 ))}
             </div>
           </section>
+          <div className="px-4">
+            <Button
+              onClick={() => {
+                chrome.tabs.create({
+                  url: chrome.runtime.getURL("/tabs/index.html")
+                })
+              }}
+              className="flex items-center gap-2 rounded-md bg-purple-600 text-white px-3 text-xs">
+              <BarChart4 className="w-4 h-4" />
+              <p>Complete Report</p>
+            </Button>
+          </div>
         </>
       ) : (
         <section className="p-5 flex flex-col items-center justify-center">

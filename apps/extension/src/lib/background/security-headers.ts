@@ -291,7 +291,9 @@ export const logHeaders = () => {
               performFinalAction(finalReport, domain, details)
             }
           } else {
-            fetch(`http://localhost:3000/api/analyze/domain?q=${domain}`)
+            fetch(
+              `${process.env.PLASMO_PUBLIC_API_URL}/analyze/domain?q=${domain}`
+            )
               .then((res) => res.json())
               .then(
                 (data: { summary: DomainAnalysisResult; score: number }) => {
